@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Queen's Chamber — Gossip Room 👑</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ─── Chamber Page Styles ─── */
+        .chamber-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            z-index: 1;
+            background:
+                radial-gradient(ellipse at 30% 20%, rgba(196, 180, 212, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(232, 196, 200, 0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(107, 140, 174, 0.1) 0%, transparent 60%),
+                linear-gradient(180deg, var(--midnight) 0%, var(--deep-navy) 100%);
+        }
+
+        /* Nav */
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            padding: 14px 20px;
+            background: linear-gradient(180deg, rgba(14, 18, 37, 0.97) 0%, rgba(14, 18, 37, 0.85) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+        }
+
+        .nav-bar a {
+            font-family: var(--font-body);
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.95rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            transition: opacity 0.3s ease, color 0.3s ease;
+        }
+
+        .nav-bar a:hover,
+        .nav-bar a.active {
+            opacity: 1;
+            color: var(--bright-gold);
+        }
+
+        .nav-separator {
+            color: var(--champagne-gold);
+            opacity: 0.3;
+            font-size: 0.8rem;
+        }
+
+        /* Gate */
+        .gate-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 80px 20px 40px;
+        }
+
+        .gate-card {
+            max-width: 480px;
+            width: 100%;
+            background: rgba(26, 31, 58, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 24px;
+            padding: 48px 36px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        .gate-card .gate-crown {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .gate-card h1 {
+            font-family: var(--font-script);
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 400;
+            background: linear-gradient(135deg, var(--pale-gold), var(--champagne-gold), var(--bright-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .gate-card .gate-subtitle {
+            font-family: var(--font-body);
+            font-style: italic;
+            color: var(--blush-pink);
+            font-size: 1rem;
+            margin-bottom: 28px;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--champagne-gold);
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            background: rgba(14, 18, 37, 0.8);
+            color: var(--cream);
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: var(--bright-gold);
+            box-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(250, 246, 239, 0.3);
+        }
+
+        .btn-royal {
+            display: inline-block;
+            width: 100%;
+            padding: 16px 32px;
+            border: 1px solid var(--champagne-gold);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.15), rgba(201, 168, 76, 0.05));
+            color: var(--bright-gold);
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-top: 6px;
+        }
+
+        .btn-royal:hover {
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.3), rgba(201, 168, 76, 0.1));
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .status-msg {
+            text-align: center;
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            margin-top: 14px;
+            display: none;
+        }
+
+        .status-msg.error {
+            display: block;
+            background: rgba(244, 67, 54, 0.15);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #ef9a9a;
+        }
+
+        /* ─── Chat Room Layout ─── */
+        .chat-room {
+            display: none;
+            flex: 1;
+            flex-direction: column;
+            padding-top: 56px;
+            /* nav height */
+            height: 100vh;
+        }
+
+        .chat-room.active {
+            display: flex;
+        }
+
+        .chat-header {
+            padding: 16px 24px;
+            text-align: center;
+            border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+            background: rgba(14, 18, 37, 0.8);
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-header h2 {
+            font-family: var(--font-script);
+            font-size: 1.8rem;
+            font-weight: 400;
+            color: var(--bright-gold);
+            margin-bottom: 2px;
+        }
+
+        .chat-header .chat-tagline {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            font-style: italic;
+            color: var(--blush-pink);
+        }
+
+        .chat-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+        }
+
+        /* Sidebar */
+        .chat-sidebar {
+            width: 220px;
+            border-right: 1px solid rgba(201, 168, 76, 0.12);
+            background: rgba(14, 18, 37, 0.5);
+            padding: 20px 16px;
+            overflow-y: auto;
+            flex-shrink: 0;
+        }
+
+        .sidebar-title {
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--champagne-gold);
+            margin-bottom: 14px;
+        }
+
+        .online-list {
+            list-style: none;
+        }
+
+        .online-user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--cream);
+        }
+
+        .online-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #66bb6a;
+            box-shadow: 0 0 8px rgba(102, 187, 106, 0.5);
+            flex-shrink: 0;
+        }
+
+        /* Messages area */
+        .messages-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .msg-bubble {
+            max-width: 75%;
+            padding: 12px 18px;
+            border-radius: 18px;
+            font-family: var(--font-body);
+            font-size: 1.02rem;
+            line-height: 1.6;
+            animation: msgSlideIn 0.3s ease;
+        }
+
+        @keyframes msgSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .msg-bubble.mine {
+            align-self: flex-end;
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.2), rgba(212, 175, 55, 0.12));
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            color: var(--cream);
+            border-bottom-right-radius: 4px;
+        }
+
+        .msg-bubble.other {
+            align-self: flex-start;
+            background: rgba(26, 31, 58, 0.7);
+            border: 1px solid rgba(196, 180, 212, 0.15);
+            color: var(--cream);
+            border-bottom-left-radius: 4px;
+        }
+
+        .msg-bubble.system {
+            align-self: center;
+            background: rgba(232, 196, 200, 0.08);
+            border: 1px solid rgba(232, 196, 200, 0.12);
+            color: var(--blush-pink);
+            font-style: italic;
+            text-align: center;
+            max-width: 90%;
+            font-size: 0.92rem;
+            border-radius: 12px;
+        }
+
+        .msg-sender {
+            font-family: var(--font-heading);
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--champagne-gold);
+            margin-bottom: 2px;
+            letter-spacing: 0.05em;
+        }
+
+        .msg-time {
+            font-size: 0.72rem;
+            color: rgba(250, 246, 239, 0.35);
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        /* Input area */
+        .chat-input-area {
+            display: flex;
+            gap: 12px;
+            padding: 16px 24px;
+            border-top: 1px solid rgba(201, 168, 76, 0.15);
+            background: rgba(14, 18, 37, 0.85);
+            backdrop-filter: blur(10px);
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 24px;
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            background: rgba(26, 31, 58, 0.7);
+            color: var(--cream);
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: var(--bright-gold);
+        }
+
+        .chat-input::placeholder {
+            color: rgba(250, 246, 239, 0.3);
+        }
+
+        .btn-send {
+            padding: 14px 24px;
+            border-radius: 24px;
+            border: 1px solid var(--champagne-gold);
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.2), rgba(201, 168, 76, 0.08));
+            color: var(--bright-gold);
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            white-space: nowrap;
+        }
+
+        .btn-send:hover {
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.35), rgba(201, 168, 76, 0.15));
+            box-shadow: 0 0 20px rgba(201, 168, 76, 0.2);
+        }
+
+        /* Welcome banner inside chat */
+        .chat-welcome {
+            text-align: center;
+            padding: 30px 20px;
+            border-bottom: 1px solid rgba(201, 168, 76, 0.1);
+            margin-bottom: 10px;
+        }
+
+        .chat-welcome p {
+            font-family: var(--font-body);
+            font-style: italic;
+            color: rgba(250, 246, 239, 0.5);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .chat-welcome .welcome-emoji {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+
+        /* ─── Responsive ─── */
+        @media (max-width: 768px) {
+            .chat-sidebar {
+                display: none;
+            }
+
+            .chat-input-area {
+                padding: 12px 16px;
+            }
+
+            .messages-area {
+                padding: 16px;
+            }
+
+            .msg-bubble {
+                max-width: 88%;
+            }
+
+            .gate-card {
+                padding: 36px 24px;
+            }
+
+            .nav-bar {
+                gap: 16px;
+                font-size: 0.85rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particles-canvas"></canvas>
+
+    <nav class="nav-bar">
+        <a href="/">✦ Home</a>
+        <span class="nav-separator">|</span>
+        <a href="/admin.html">🔑 Royal Decrees</a>
+        <span class="nav-separator">|</span>
+        <a href="/chamber.html" class="active">👑 Queen's Chamber</a>
+    </nav>
+
+    <!-- Gate: Enter name + invitation code -->
+    <div class="chamber-page" id="gate-page">
+        <div class="gate-container">
+            <div class="gate-card">
+                <div class="gate-crown">👑</div>
+                <h1>Queen's Chamber</h1>
+                <p class="gate-subtitle">Wine, tea, and gossip so scandalous even Lady Whistledown would gasp</p>
+
+                <div class="form-group">
+                    <label>Your Name</label>
+                    <input type="text" id="entry-name" placeholder="e.g. Princess Rishika">
+                </div>
+                <div class="form-group">
+                    <label>Invitation Code</label>
+                    <input type="text" id="entry-code" placeholder="Enter your royal code"
+                        style="text-transform: uppercase; letter-spacing: 0.15em;">
+                </div>
+                <button class="btn-royal" id="enter-chamber-btn">Enter the Chamber 🍷</button>
+                <div class="status-msg" id="gate-error"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Room (hidden until validated) -->
+    <div class="chat-room" id="chat-room">
+        <div class="chat-header">
+            <h2>👑 The Queen's Chamber</h2>
+            <p class="chat-tagline">Sip your tea. Spill the gossip. What happens here stays here... mostly. 🍷</p>
+        </div>
+
+        <div class="chat-body">
+            <aside class="chat-sidebar">
+                <h3 class="sidebar-title">👑 In the Chamber</h3>
+                <ul class="online-list" id="online-list">
+                    <!-- populated by socket -->
+                </ul>
+            </aside>
+
+            <div class="messages-area" id="messages-area">
+                <div class="chat-welcome">
+                    <div class="welcome-emoji">🍷🫖✨</div>
+                    <p>Welcome to the Queen's Chamber!<br>
+                        The wine is poured, the tea is brewed, and the gossip is ready to flow.<br>
+                        Be witty. Be scandalous. Be <em>legendary</em>.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Spill the tea, darling... 🍵"
+                autocomplete="off">
+            <button class="btn-send" id="send-btn">Send ✉</button>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        // ─── Particles (lightweight) ───
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const PARTICLE_COUNT = 25;
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5; this.speedX = (Math.random() - 0.5) * 0.2;
+                this.speedY = -(Math.random() * 0.3 + 0.05); this.opacity = Math.random() * 0.35 + 0.05;
+                this.fadeDir = Math.random() > 0.5 ? 0.002 : -0.002;
+                const colors = ['rgba(201,168,76,', 'rgba(196,180,212,', 'rgba(232,196,200,'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY; this.opacity += this.fadeDir;
+                if (this.opacity <= 0.03 || this.opacity >= 0.4) this.fadeDir *= -1;
+                if (this.y < -10) { this.reset(); this.y = canvas.height + 10; }
+            }
+            draw() {
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color + this.opacity + ')'; ctx.fill();
+            }
+        }
+        resizeCanvas();
+        for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+        (function anim() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(anim); })();
+        window.addEventListener('resize', resizeCanvas);
+
+        // ─── Elements ───
+        const gatePage = document.getElementById('gate-page');
+        const chatRoom = document.getElementById('chat-room');
+        const gateError = document.getElementById('gate-error');
+        const messagesArea = document.getElementById('messages-area');
+        const chatInput = document.getElementById('chat-input');
+        const onlineList = document.getElementById('online-list');
+
+        let myName = '';
+        let myCode = '';
+        let socket;
+
+        // ─── Gate Logic ───
+        document.getElementById('enter-chamber-btn').addEventListener('click', enterChamber);
+        document.getElementById('entry-code').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') enterChamber();
+        });
+        document.getElementById('entry-name').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('entry-code').focus();
+        });
+
+        function enterChamber() {
+            const name = document.getElementById('entry-name').value.trim();
+            const code = document.getElementById('entry-code').value.trim().toUpperCase();
+
+            if (!name || !code) {
+                showError('Both your name and invitation code are required, darling.');
+                return;
+            }
+
+            fetch('/api/validate-code', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ name, code }),
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.error) {
+                        showError(data.error);
+                    } else {
+                        myName = name;
+                        myCode = code;
+                        openChat();
+                    }
+                })
+                .catch(() => showError('Connection error. The court is unreachable.'));
+        }
+
+        function showError(msg) {
+            gateError.textContent = msg;
+            gateError.className = 'status-msg error';
+        }
+
+        // ─── Open Chat ───
+        function openChat() {
+            gatePage.style.display = 'none';
+            chatRoom.classList.add('active');
+
+            // Load history
+            fetch('/api/messages', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: myCode }),
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.messages) {
+                        data.messages.forEach(msg => appendMessage(msg));
+                    }
+                    scrollToBottom();
+                });
+
+            // Connect socket
+            socket = io();
+
+            socket.emit('join-chamber', { name: myName, code: myCode });
+
+            socket.on('chat-message', (msg) => {
+                appendMessage(msg);
+                scrollToBottom();
+            });
+
+            socket.on('online-users', (users) => {
+                onlineList.innerHTML = users.map(u =>
+                    `<li class="online-user"><span class="online-dot"></span>${u}</li>`
+                ).join('');
+            });
+
+            socket.on('error-msg', (msg) => {
+                alert(msg);
+            });
+
+            // Send message
+            document.getElementById('send-btn').addEventListener('click', sendMessage);
+            chatInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    sendMessage();
+                }
+            });
+
+            chatInput.focus();
+        }
+
+        function sendMessage() {
+            const content = chatInput.value.trim();
+            if (!content) return;
+            socket.emit('send-message', { content });
+            chatInput.value = '';
+            chatInput.focus();
+        }
+
+        function appendMessage(msg) {
+            const div = document.createElement('div');
+
+            if (msg.system) {
+                div.className = 'msg-bubble system';
+                div.textContent = msg.content;
+            } else {
+                const isMine = msg.sender_name === myName;
+                div.className = `msg-bubble ${isMine ? 'mine' : 'other'}`;
+
+                const senderEl = document.createElement('div');
+                senderEl.className = 'msg-sender';
+                senderEl.textContent = isMine ? 'You' : msg.sender_name;
+
+                const contentEl = document.createElement('div');
+                contentEl.textContent = msg.content;
+
+                const timeEl = document.createElement('div');
+                timeEl.className = 'msg-time';
+                timeEl.textContent = formatTime(msg.created_at);
+
+                div.appendChild(senderEl);
+                div.appendChild(contentEl);
+                div.appendChild(timeEl);
+            }
+
+            messagesArea.appendChild(div);
+        }
+
+        function scrollToBottom() {
+            messagesArea.scrollTop = messagesArea.scrollHeight;
+        }
+
+        function formatTime(iso) {
+            try {
+                const d = new Date(iso);
+                return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+            } catch {
+                return '';
+            }
+        }
+    </script>
+</body>
+
+</html>

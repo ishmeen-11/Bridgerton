@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin — Send Royal Invitations</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* ─── Admin Page Overrides ─── */
+        .admin-page {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 60px 20px 40px;
+            position: relative;
+            z-index: 1;
+            background:
+                radial-gradient(ellipse at 50% 20%, rgba(107, 140, 174, 0.15) 0%, transparent 55%),
+                radial-gradient(ellipse at 20% 80%, rgba(196, 180, 212, 0.1) 0%, transparent 50%),
+                linear-gradient(180deg, var(--midnight) 0%, var(--deep-navy) 100%);
+        }
+
+        .admin-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .admin-header h1 {
+            font-family: var(--font-script);
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            font-weight: 400;
+            background: linear-gradient(135deg, var(--pale-gold), var(--champagne-gold), var(--bright-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .admin-header p {
+            font-family: var(--font-body);
+            color: var(--blush-pink);
+            font-style: italic;
+            font-size: 1.1rem;
+        }
+
+        /* Gate / Admin Key Entry */
+        .admin-gate,
+        .admin-panel {
+            max-width: 650px;
+            width: 100%;
+        }
+
+        .admin-gate {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .form-card {
+            width: 100%;
+            background: rgba(26, 31, 58, 0.65);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 24px;
+            padding: 40px 36px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .form-card h2 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--cream);
+            text-align: center;
+            margin-bottom: 24px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--champagne-gold);
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 14px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            background: rgba(14, 18, 37, 0.8);
+            color: var(--cream);
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            outline: none;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .form-group input:focus {
+            border-color: var(--bright-gold);
+            box-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+        }
+
+        .form-group input::placeholder {
+            color: rgba(250, 246, 239, 0.3);
+        }
+
+        .btn-royal {
+            display: inline-block;
+            width: 100%;
+            padding: 16px 32px;
+            border: 1px solid var(--champagne-gold);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.15), rgba(201, 168, 76, 0.05));
+            color: var(--bright-gold);
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .btn-royal:hover {
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.3), rgba(201, 168, 76, 0.1));
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-royal:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Status messages */
+        .status-msg {
+            text-align: center;
+            padding: 14px 20px;
+            border-radius: 12px;
+            font-family: var(--font-body);
+            font-size: 1rem;
+            margin-top: 16px;
+            display: none;
+        }
+
+        .status-msg.success {
+            display: block;
+            background: rgba(76, 175, 80, 0.15);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            color: #a5d6a7;
+        }
+
+        .status-msg.error {
+            display: block;
+            background: rgba(244, 67, 54, 0.15);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #ef9a9a;
+        }
+
+        /* Invitations list */
+        .invitations-section {
+            margin-top: 40px;
+        }
+
+        .invitations-section h2 {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            color: var(--cream);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .invite-list {
+            list-style: none;
+        }
+
+        .invite-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 16px 20px;
+            background: rgba(26, 31, 58, 0.5);
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            border-radius: 12px;
+            margin-bottom: 10px;
+            font-family: var(--font-body);
+            transition: border-color 0.3s ease;
+        }
+
+        .invite-item:hover {
+            border-color: rgba(201, 168, 76, 0.35);
+        }
+
+        .invite-email {
+            color: var(--cream);
+            font-size: 1rem;
+        }
+
+        .invite-name {
+            color: var(--blush-pink);
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+
+        .invite-code {
+            font-family: monospace;
+            font-size: 0.95rem;
+            color: var(--bright-gold);
+            background: rgba(201, 168, 76, 0.1);
+            padding: 4px 12px;
+            border-radius: 6px;
+            letter-spacing: 0.1em;
+        }
+
+        .invite-status {
+            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 20px;
+        }
+
+        .invite-status.used {
+            background: rgba(76, 175, 80, 0.15);
+            color: #a5d6a7;
+        }
+
+        .invite-status.pending {
+            background: rgba(255, 193, 7, 0.15);
+            color: #ffe082;
+        }
+
+        .invite-empty {
+            text-align: center;
+            color: rgba(250, 246, 239, 0.4);
+            font-style: italic;
+            padding: 30px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            font-family: var(--font-body);
+            color: var(--champagne-gold);
+            text-decoration: none;
+            font-size: 1rem;
+            opacity: 0.7;
+            transition: opacity 0.3s ease;
+        }
+
+        .back-link:hover {
+            opacity: 1;
+        }
+
+        .nav-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 32px;
+            padding: 14px 20px;
+            background: linear-gradient(180deg, rgba(14, 18, 37, 0.97) 0%, rgba(14, 18, 37, 0.85) 100%);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(201, 168, 76, 0.15);
+        }
+
+        .nav-bar a {
+            font-family: var(--font-body);
+            color: var(--cream);
+            text-decoration: none;
+            font-size: 0.95rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            opacity: 0.7;
+            transition: opacity 0.3s ease, color 0.3s ease;
+        }
+
+        .nav-bar a:hover,
+        .nav-bar a.active {
+            opacity: 1;
+            color: var(--bright-gold);
+        }
+
+        .nav-separator {
+            color: var(--champagne-gold);
+            opacity: 0.3;
+            font-size: 0.8rem;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particles-canvas"></canvas>
+
+    <nav class="nav-bar">
+        <a href="/">✦ Home</a>
+        <span class="nav-separator">|</span>
+        <a href="/admin.html" class="active">🔑 Royal Decrees</a>
+        <span class="nav-separator">|</span>
+        <a href="/chamber.html">👑 Queen's Chamber</a>
+    </nav>
+
+    <main class="admin-page">
+        <div class="admin-header">
+            <h1>Royal Decrees</h1>
+            <p>Send invitations to the chosen few who are worthy of the Queen's Chamber</p>
+        </div>
+
+        <!-- Admin Gate -->
+        <div class="admin-gate" id="admin-gate">
+            <div class="form-card">
+                <h2>🔐 Enter the Admin Key</h2>
+                <div class="form-group">
+                    <label>Admin Key</label>
+                    <input type="password" id="admin-key-input" placeholder="The Queen's secret word...">
+                </div>
+                <button class="btn-royal" id="admin-enter-btn">Enter the Court</button>
+                <div class="status-msg" id="gate-status"></div>
+            </div>
+        </div>
+
+        <!-- Admin Panel (hidden until key entered) -->
+        <div class="admin-panel" id="admin-panel" style="display: none;">
+            <!-- Send Invitation Form -->
+            <div class="form-card">
+                <h2>✉ Send a Royal Invitation</h2>
+                <div class="form-group">
+                    <label>Guest's Name</label>
+                    <input type="text" id="guest-name" placeholder="e.g. Lady Penelope">
+                </div>
+                <div class="form-group">
+                    <label>Guest's Email</label>
+                    <input type="email" id="guest-email" placeholder="e.g. penelope@ton.society">
+                </div>
+                <button class="btn-royal" id="send-invite-btn">📜 Send Invitation</button>
+                <div class="status-msg" id="invite-status"></div>
+            </div>
+
+            <!-- Invitations List -->
+            <div class="invitations-section form-card" style="margin-top: 24px;">
+                <h2>📋 Invitations Ledger</h2>
+                <ul class="invite-list" id="invite-list">
+                    <li class="invite-empty">Loading the royal records...</li>
+                </ul>
+            </div>
+        </div>
+
+        <a href="/" class="back-link">← Return to the Grand Hall</a>
+    </main>
+
+    <script>
+        // ─── Particles (reuse from main site) ───
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d');
+        let particles = [];
+        const PARTICLE_COUNT = 30;
+
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5; this.speedX = (Math.random() - 0.5) * 0.3;
+                this.speedY = -(Math.random() * 0.3 + 0.1); this.opacity = Math.random() * 0.4 + 0.1;
+                this.fadeDir = Math.random() > 0.5 ? 0.003 : -0.003;
+                const colors = ['rgba(201,168,76,', 'rgba(212,175,55,', 'rgba(232,212,139,', 'rgba(196,180,212,'];
+                this.color = colors[Math.floor(Math.random() * colors.length)];
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY; this.opacity += this.fadeDir;
+                if (this.opacity <= 0.05 || this.opacity >= 0.5) this.fadeDir *= -1;
+                if (this.y < -10) { this.reset(); this.y = canvas.height + 10; }
+            }
+            draw() {
+                ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fillStyle = this.color + this.opacity + ')'; ctx.fill();
+            }
+        }
+        resizeCanvas();
+        for (let i = 0; i < PARTICLE_COUNT; i++) particles.push(new Particle());
+        (function anim() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw(); }); requestAnimationFrame(anim); })();
+        window.addEventListener('resize', resizeCanvas);
+
+        // ─── Admin Logic ───
+        let adminKey = '';
+        const gateEl = document.getElementById('admin-gate');
+        const panelEl = document.getElementById('admin-panel');
+        const gateStatus = document.getElementById('gate-status');
+        const inviteStatus = document.getElementById('invite-status');
+
+        document.getElementById('admin-enter-btn').addEventListener('click', () => {
+            adminKey = document.getElementById('admin-key-input').value.trim();
+            if (!adminKey) {
+                showStatus(gateStatus, 'Please enter the admin key.', 'error');
+                return;
+            }
+            // Validate by fetching invitations
+            fetch('/api/invitations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ adminKey }),
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.error) {
+                        showStatus(gateStatus, data.error, 'error');
+                    } else {
+                        gateEl.style.display = 'none';
+                        panelEl.style.display = 'block';
+                        renderInvitations(data.invitations);
+                    }
+                })
+                .catch(() => showStatus(gateStatus, 'Connection error.', 'error'));
+        });
+
+        // Allow Enter key on admin key input
+        document.getElementById('admin-key-input').addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') document.getElementById('admin-enter-btn').click();
+        });
+
+        document.getElementById('send-invite-btn').addEventListener('click', () => {
+            const guestName = document.getElementById('guest-name').value.trim();
+            const email = document.getElementById('guest-email').value.trim();
+
+            if (!email) {
+                showStatus(inviteStatus, 'An email address is required, Your Majesty.', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('send-invite-btn');
+            btn.disabled = true;
+            btn.textContent = 'Sending royal decree...';
+
+            fetch('/api/invite', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ adminKey, email, guestName }),
+            })
+                .then(r => r.json())
+                .then(data => {
+                    btn.disabled = false;
+                    btn.textContent = '📜 Send Invitation';
+                    if (data.error) {
+                        showStatus(inviteStatus, data.error, 'error');
+                    } else {
+                        showStatus(inviteStatus, data.message, 'success');
+                        document.getElementById('guest-name').value = '';
+                        document.getElementById('guest-email').value = '';
+                        refreshInvitations();
+                    }
+                })
+                .catch(() => {
+                    btn.disabled = false;
+                    btn.textContent = '📜 Send Invitation';
+                    showStatus(inviteStatus, 'Connection error.', 'error');
+                });
+        });
+
+        function refreshInvitations() {
+            fetch('/api/invitations', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ adminKey }),
+            })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.invitations) renderInvitations(data.invitations);
+                });
+        }
+
+        function renderInvitations(list) {
+            const ul = document.getElementById('invite-list');
+            if (!list.length) {
+                ul.innerHTML = '<li class="invite-empty">No invitations sent yet. The court awaits your command.</li>';
+                return;
+            }
+            ul.innerHTML = list.map(inv => `
+                <li class="invite-item">
+                    <div>
+                        <span class="invite-email">${inv.email}</span>
+                        ${inv.name ? `<span class="invite-name"> — ${inv.name}</span>` : ''}
+                    </div>
+                    <span class="invite-code">${inv.code}</span>
+                    <span class="invite-status ${inv.used ? 'used' : 'pending'}">
+                        ${inv.used ? '✓ Used' : '⏳ Pending'}
+                    </span>
+                </li>
+            `).join('');
+        }
+
+        function showStatus(el, msg, type) {
+            el.textContent = msg;
+            el.className = 'status-msg ' + type;
+            if (type === 'success') setTimeout(() => { el.style.display = 'none'; }, 5000);
+        }
+    </script>
+</body>
+
+</html>
