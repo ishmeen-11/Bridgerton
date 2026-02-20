@@ -62,9 +62,9 @@ app.post('/api/invite', async (req, res) => {
 
     // Try sending email
     let emailSent = false;
-    if (transporter && process.env.SMTP_USER && process.env.SMTP_PASS !== 'your-gmail-app-password') {
+    if (transporter && process.env.SMTP_USER && process.env.SMTP_PASS) {
         try {
-            await transporter.sendMail({
+            const info = await transporter.sendMail({
                 from: `"The Queen's Court 👑" <${process.env.SMTP_USER}>`,
                 to: email,
                 subject: '👑 You Are Cordially Invited to the Queen\'s Chamber — Bridgerton Watch Party',
@@ -101,9 +101,15 @@ app.post('/api/invite', async (req, res) => {
                 `,
             });
             emailSent = true;
+            console.log('✅ Email sent successfully to:', email, '| Message ID:', info.messageId);
         } catch (err) {
-            console.error('Email send error:', err.message);
+            console.error('❌ Email send FAILED to:', email);
+            console.error('   Error:', err.message);
+            console.error('   SMTP Host:', process.env.SMTP_HOST);
+            console.error('   SMTP User:', process.env.SMTP_USER);
         }
+    } else {
+        console.warn('⚠  Skipping email — SMTP not configured. SMTP_USER:', process.env.SMTP_USER ? 'SET' : 'MISSING', '| SMTP_PASS:', process.env.SMTP_PASS ? 'SET' : 'MISSING');
     }
 
     res.json({
