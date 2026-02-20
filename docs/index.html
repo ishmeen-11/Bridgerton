@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description"
+        content="Countdown to Bridgerton Season 4 Part 2 on Netflix — Ishmeen, Vishal, Rishika & Kohli are counting every second!">
+    <title>Bridgerton Season 4 Part 2 — The Countdown</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap"
+        rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Floating particles canvas -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- Decorative top ornament -->
+    <div class="ornament-top" aria-hidden="true">
+        <span class="ornament-flourish">✦ ❦ ✦</span>
+    </div>
+
+    <!-- Hero Section -->
+    <header class="hero" id="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <p class="hero-pre-title animate-fade-up">Netflix Presents</p>
+            <h1 class="hero-title animate-fade-up delay-1">
+                <span class="script-font">Bridgerton</span>
+            </h1>
+            <p class="hero-subtitle animate-fade-up delay-2">Season 4 · Part II</p>
+            <p class="hero-tagline animate-fade-up delay-3">Benedict Bridgerton's Story Continues</p>
+
+            <div class="ornamental-divider animate-fade-up delay-3">
+                <span>⟡</span>
+                <span class="divider-line"></span>
+                <span>♔</span>
+                <span class="divider-line"></span>
+                <span>⟡</span>
+            </div>
+
+            <!-- Countdown Timer -->
+            <div class="countdown-container animate-fade-up delay-4" id="countdown">
+                <div class="countdown-box">
+                    <div class="countdown-number" id="days">00</div>
+                    <div class="countdown-label">Days</div>
+                </div>
+                <div class="countdown-separator">:</div>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="hours">00</div>
+                    <div class="countdown-label">Hours</div>
+                </div>
+                <div class="countdown-separator">:</div>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="minutes">00</div>
+                    <div class="countdown-label">Minutes</div>
+                </div>
+                <div class="countdown-separator">:</div>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="seconds">00</div>
+                    <div class="countdown-label">Seconds</div>
+                </div>
+            </div>
+
+            <p class="release-date animate-fade-up delay-5">
+                <span class="gold-shimmer">February 26, 2026</span> · Only on Netflix
+            </p>
+        </div>
+
+        <div class="scroll-indicator animate-fade-up delay-5">
+            <span>Scroll to discover</span>
+            <div class="scroll-arrow">↓</div>
+        </div>
+    </header>
+
+    <!-- Watch Party Section -->
+    <section class="watch-party" id="watch-party">
+        <div class="section-header">
+            <p class="section-pre-title">At Riverside Commons</p>
+            <h2 class="section-title">The Watch Party</h2>
+            <div class="ornamental-divider small">
+                <span>⟡</span>
+                <span class="divider-line"></span>
+                <span>❦</span>
+                <span class="divider-line"></span>
+                <span>⟡</span>
+            </div>
+            <p class="section-description">
+                The crown's finest have assembled at Riverside Commons for a most anticipated evening —
+                armed with the finest wine, the warmest tea, and gossip scandalous enough to make
+                Lady Whistledown blush.
+            </p>
+        </div>
+
+        <div class="friends-grid">
+            <!-- Ishmeen - Co-Host -->
+            <div class="friend-card host-card reveal-on-scroll" id="card-ishmeen">
+                <div class="card-glow"></div>
+                <div class="card-inner">
+                    <div class="avatar-container">
+                        <div class="avatar-ring">
+                            <div class="avatar" id="avatar-ishmeen">
+                                <span class="avatar-initial">I</span>
+                            </div>
+                        </div>
+                        <div class="crown-badge">♛</div>
+                    </div>
+                    <h3 class="friend-name">Ishmeen</h3>
+                    <p class="friend-title">Princess Ishmeen of Hamilton Heights</p>
+                    <p class="friend-quote">"A princess does not simply watch Bridgerton — she critiques every gown,
+                        sips her tea with authority, and spills gossip between every scene."</p>
+                    <div class="card-ornament">✦ ✦ ✦</div>
+                </div>
+            </div>
+
+            <!-- Kohli - Co-Host -->
+            <div class="friend-card host-card reveal-on-scroll" id="card-khushi">
+                <div class="card-glow"></div>
+                <div class="card-inner">
+                    <div class="avatar-container">
+                        <div class="avatar-ring">
+                            <div class="avatar" id="avatar-khushi">
+                                <span class="avatar-initial">K</span>
+                            </div>
+                        </div>
+                        <div class="crown-badge">♛</div>
+                    </div>
+                    <h3 class="friend-name">Khushi</h3>
+                    <p class="friend-title">Queen Khushi Kohli of St. Johns</p>
+                    <p class="friend-quote">"A queen rules with wine in one hand and the remote in the other.
+                        The gossip shall flow as freely as the Pinot Noir."</p>
+                    <div class="card-ornament">✦ ✦ ✦</div>
+                </div>
+            </div>
+
+            <!-- Vishal - Invited Guest -->
+            <div class="friend-card host-card reveal-on-scroll" id="card-vishal">
+                <div class="card-glow"></div>
+                <div class="card-inner">
+                    <div class="avatar-container">
+                        <div class="avatar-ring">
+                            <div class="avatar" id="avatar-vishal">
+                                <span class="avatar-initial">V</span>
+                            </div>
+                        </div>
+                        <div class="crown-badge">♛</div>
+                    </div>
+                    <h3 class="friend-name">Vishal</h3>
+                    <p class="friend-title">Your Grace, Vishal · Duke of Morningside Heights</p>
+                    <p class="friend-quote">"A duke does not merely attend a watch party — he arrives with impeccable
+                        taste in wine and opinions no one asked for, yet everyone needs."</p>
+                    <div class="card-ornament">✦ ✦ ✦</div>
+                </div>
+            </div>
+
+            <!-- Rishika - Invited Guest -->
+            <div class="friend-card host-card reveal-on-scroll" id="card-rishika">
+                <div class="card-glow"></div>
+                <div class="card-inner">
+                    <div class="avatar-container">
+                        <div class="avatar-ring">
+                            <div class="avatar" id="avatar-rishika">
+                                <span class="avatar-initial">R</span>
+                            </div>
+                        </div>
+                        <div class="crown-badge">♛</div>
+                    </div>
+                    <h3 class="friend-name">Rishika</h3>
+                    <p class="friend-title">Princess Rishika of Washington Heights</p>
+                    <p class="friend-quote">"I bring the tea — both the kind you sip and the kind you spill.
+                        Spoil a single scene and I shall exile you from the kingdom."</p>
+                    <div class="card-ornament">✦ ✦ ✦</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Season Info Section -->
+    <section class="season-info" id="season-info">
+        <div class="section-header">
+            <p class="section-pre-title">This Season on</p>
+            <h2 class="section-title script-font">Bridgerton</h2>
+            <div class="ornamental-divider small">
+                <span>⟡</span>
+                <span class="divider-line"></span>
+                <span>♔</span>
+                <span class="divider-line"></span>
+                <span>⟡</span>
+            </div>
+        </div>
+
+        <div class="info-content reveal-on-scroll">
+            <div class="info-card">
+                <div class="info-icon">🎭</div>
+                <h3>Benedict's Story</h3>
+                <p>The second Bridgerton son finds himself captivated by a mysterious woman at a masquerade ball,
+                    unaware that their love story will become the talk of the ton.</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">💎</div>
+                <h3>A Cinderella Tale</h3>
+                <p>Inspired by Julia Quinn's <em>"An Offer From a Gentleman,"</em> Season 4 weaves a modern Cinderella
+                    story set in the glittering world of Regency London.</p>
+            </div>
+            <div class="info-card">
+                <div class="info-icon">✨</div>
+                <h3>Part 2 Awaits</h3>
+                <p>After Part 1 left us breathless, Part 2 promises to deliver four more episodes of romance, intrigue,
+                    and scandal. The season finale we've been dreaming of!</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lady Whistledown Section -->
+    <section class="whistledown" id="whistledown">
+        <div class="whistledown-content reveal-on-scroll">
+            <div class="quill-icon">✒</div>
+            <blockquote class="whistledown-quote">
+                "Dear Reader, it has come to this author's attention that
+                <strong>Queen Khushi Kohli of St. Johns</strong> and
+                <strong>Princess Ishmeen of Hamilton Heights</strong>
+                have conspired with <strong>His Grace, Vishal, the Duke of Morningside Heights</strong>
+                and <strong>Princess Rishika of Washington Heights</strong> for what promises to be
+                the event of the season at <strong>Riverside Commons</strong>. The wine shall be plentiful,
+                the tea piping hot, and the gossip — oh, the gossip — positively <em>ruinous</em>.
+                One does wonder who shall cry first during
+                <strong>Bridgerton Season Four, Part Two</strong>.
+                This author already has her wager placed. 🍷"
+            </blockquote>
+            <p class="whistledown-signature">— Lady Whistledown's Society Papers</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="ornamental-divider small">
+            <span>⟡</span>
+            <span class="divider-line"></span>
+            <span>❦</span>
+            <span class="divider-line"></span>
+            <span>⟡</span>
+        </div>
+        <p class="footer-text">
+            Made with ♥ for the Bridgerton Watch Party
+        </p>
+        <p class="footer-sub">
+            Bridgerton © Netflix · Shondaland · This is a fan page
+        </p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
