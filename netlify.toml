@@ -1,0 +1,26 @@
+# Netlify Configuration — Bridgerton Watch Party
+
+[build]
+  publish = "public"              # Static files served from public/
+  functions = "netlify/functions"  # Serverless functions directory
+
+# Redirect API calls to Netlify Functions
+[[redirects]]
+  from = "/api/invite"
+  to = "/.netlify/functions/invite"
+  status = 200
+
+[[redirects]]
+  from = "/api/invitations"
+  to = "/.netlify/functions/invitations"
+  status = 200
+
+[[redirects]]
+  from = "/api/validate-code"
+  to = "/.netlify/functions/validate-code"
+  status = 200
+
+[[redirects]]
+  from = "/api/messages"
+  to = "/.netlify/functions/messages"
+  status = 200
