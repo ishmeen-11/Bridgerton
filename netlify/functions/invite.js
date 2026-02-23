@@ -24,7 +24,8 @@ exports.handler = async (event) => {
     try {
         await store.createInvitation(code, email, guestName || '');
     } catch (err) {
-        return { statusCode: 500, body: JSON.stringify({ error: 'Failed to create invitation.' }) };
+        console.error('❌ Failed to create invitation:', err.message, err.stack);
+        return { statusCode: 500, body: JSON.stringify({ error: 'Failed to create invitation: ' + err.message }) };
     }
 
     // Try sending email via SMTP

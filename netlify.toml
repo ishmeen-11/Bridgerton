@@ -3,6 +3,11 @@
 [build]
   publish = "public"              # Static files served from public/
   functions = "netlify/functions"  # Serverless functions directory
+  command = "npm install"          # Install dependencies (needed for functions)
+
+[functions]
+  node_bundler = "esbuild"
+  included_files = ["netlify/functions/**"]
 
 # Redirect API calls to Netlify Functions
 [[redirects]]
