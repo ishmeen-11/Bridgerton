@@ -48,7 +48,7 @@ exports.handler = async (event) => {
             });
 
             await transporter.sendMail({
-                from: `"The Queen's Court 👑" <${process.env.SMTP_USER}>`,
+                from: `"The Queen's Court 👑" <${process.env.SMTP_FROM || process.env.SMTP_USER}>`,
                 to: email,
                 subject: '👑 You Are Cordially Invited to the Queen\'s Chamber — Bridgerton Watch Party',
                 html: `
