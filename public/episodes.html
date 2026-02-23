@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>📅 Episode Tracker — Bridgerton Watch Party</title>
+    <link rel="icon" type="image/png" href="/images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -220,14 +221,14 @@
         window.addEventListener('resize', resizeCanvas);
 
         const episodes = [
-            { part: 1, ep: 1, title: "A Season of Change", desc: "The ton gathers for a new season as Benedict encounters a mysterious stranger." },
-            { part: 1, ep: 2, title: "The Masquerade", desc: "A grand masquerade ball sets the stage for unexpected connections." },
-            { part: 1, ep: 3, title: "Secrets Unveiled", desc: "Hidden truths begin to surface as alliances shift across the ton." },
-            { part: 1, ep: 4, title: "The Artist's Heart", desc: "Benedict's world expands as he follows his passion into uncharted territory." },
-            { part: 2, ep: 5, title: "A Gentleman's Offer", desc: "A proposal that will change everything — but is it enough?" },
-            { part: 2, ep: 6, title: "Whispers and Waltzes", desc: "The gossip reaches a fever pitch as the season reaches its climax." },
-            { part: 2, ep: 7, title: "The Truth of It", desc: "Deceptions unravel and hearts are laid bare before all the ton." },
-            { part: 2, ep: 8, title: "Ever After", desc: "The season finale — where destinies are sealed and love is tested one final time." },
+            { part: 1, ep: 1, title: "An Offer From a Stranger", desc: "The new social season opens with a grand ball, where Benedict Bridgerton is captivated by a mysterious woman in a silver mask." },
+            { part: 1, ep: 2, title: "The Silver Lady", desc: "Benedict becomes obsessed with finding the woman from the masquerade. Meanwhile, the Featheringtons face a new scandal." },
+            { part: 1, ep: 3, title: "Unmasked", desc: "Identities are revealed and secrets spill as the ton's fascination with the mystery woman grows ever more dangerous." },
+            { part: 1, ep: 4, title: "A Gilded Cage", desc: "Sophie Beckett's hidden past threatens everything as Benedict draws closer to the truth of who she really is." },
+            { part: 2, ep: 5, title: "A Gentleman's Proposal", desc: "Benedict makes a bold declaration that shocks the ton. But will love be enough to bridge two very different worlds?" },
+            { part: 2, ep: 6, title: "The Scandal Sheet", desc: "Lady Whistledown's most explosive column yet sends shockwaves through Mayfair. No one is safe from her quill." },
+            { part: 2, ep: 7, title: "Hearts Laid Bare", desc: "With the season's end approaching, alliances shatter and confessions are made under moonlight." },
+            { part: 2, ep: 8, title: "Ever After", desc: "The grand finale — where love conquers all, or breaks apart. Prepare your tissues and your wine." },
         ];
 
         let watched = JSON.parse(localStorage.getItem('bridgerton-watched') || '[]');
