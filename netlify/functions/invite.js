@@ -30,6 +30,7 @@ exports.handler = async (event) => {
 
     // Try sending email via SMTP
     let emailSent = false;
+    let emailError = null;
     if (process.env.SMTP_USER && process.env.SMTP_PASS) {
         try {
             const smtpPort = parseInt(process.env.SMTP_PORT || '587');
@@ -85,6 +86,7 @@ exports.handler = async (event) => {
             emailSent = true;
         } catch (err) {
             console.error('❌ Email send FAILED:', err.message);
+            emailError = err.message;
         }
     }
 
@@ -95,6 +97,13 @@ exports.handler = async (event) => {
             success: true,
             code,
             emailSent,
+            smtpDebug: {
+                hasUser: !!process.env.SMTP_USER,
+                hasPass: !!process.env.SMTP_PASS,
+                host: process.env.SMTP_HOST || '(not set)',
+                port: process.env.SMTP_PORT || '(not set)',
+                error: emailError || null,
+            },
             message: emailSent
                 ? `Invitation sent to ${email} with code ${code}!`
                 : `Invitation created with code ${code} (email not configured — share the code manually).`,
