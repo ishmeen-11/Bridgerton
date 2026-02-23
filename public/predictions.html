@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏆 Prediction Game — Bridgerton Watch Party</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .pred-page {
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding: 80px 20px 60px;
+            background: radial-gradient(ellipse at 30% 20%, rgba(196, 180, 212, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(232, 196, 200, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, var(--midnight) 0%, var(--deep-navy) 100%);
+        }
+
+        .pred-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .pred-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .pred-header .icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .pred-header h1 {
+            font-family: var(--font-script);
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 400;
+            background: linear-gradient(135deg, var(--pale-gold), var(--champagne-gold), var(--bright-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .pred-header p {
+            font-family: var(--font-body);
+            font-style: italic;
+            color: var(--blush-pink);
+            font-size: 1rem;
+        }
+
+        .pred-form {
+            background: rgba(26, 31, 58, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .pred-form label {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--champagne-gold);
+            margin-bottom: 10px;
+        }
+
+        .pred-form input,
+        .pred-form textarea,
+        .pred-form select {
+            width: 100%;
+            padding: 14px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            background: rgba(14, 18, 37, 0.8);
+            color: var(--cream);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            outline: none;
+            margin-bottom: 14px;
+            box-sizing: border-box;
+        }
+
+        .pred-form textarea {
+            min-height: 90px;
+            resize: vertical;
+            line-height: 1.7;
+        }
+
+        .pred-form select {
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .pred-form select option {
+            background: #0e1225;
+            color: #faf6ef;
+        }
+
+        .pred-form input::placeholder,
+        .pred-form textarea::placeholder {
+            color: rgba(250, 246, 239, 0.3);
+        }
+
+        .btn-predict {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--champagne-gold);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.2), rgba(201, 168, 76, 0.08));
+            color: var(--bright-gold);
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-predict:hover {
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.35), rgba(201, 168, 76, 0.15));
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .status-msg {
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .status-msg.success {
+            display: block;
+            background: rgba(102, 187, 106, 0.15);
+            border: 1px solid rgba(102, 187, 106, 0.3);
+            color: #81c784;
+        }
+
+        .status-msg.error {
+            display: block;
+            background: rgba(244, 67, 54, 0.15);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #ef9a9a;
+        }
+
+        .pred-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .pred-entry {
+            background: rgba(26, 31, 58, 0.5);
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            border-radius: 18px;
+            padding: 24px;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .pred-category {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-family: var(--font-body);
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            margin-bottom: 10px;
+        }
+
+        .pred-category.romance {
+            background: rgba(232, 196, 200, 0.2);
+            color: #e8c4c8;
+            border: 1px solid rgba(232, 196, 200, 0.3);
+        }
+
+        .pred-category.scandal {
+            background: rgba(244, 67, 54, 0.15);
+            color: #ef9a9a;
+            border: 1px solid rgba(244, 67, 54, 0.2);
+        }
+
+        .pred-category.plot {
+            background: rgba(201, 168, 76, 0.15);
+            color: var(--champagne-gold);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+        }
+
+        .pred-category.general {
+            background: rgba(196, 180, 212, 0.15);
+            color: #c4b4d4;
+            border: 1px solid rgba(196, 180, 212, 0.25);
+        }
+
+        .pred-text {
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--cream);
+            margin-bottom: 10px;
+        }
+
+        .pred-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .pred-author {
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            color: var(--champagne-gold);
+        }
+
+        .pred-time {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            color: rgba(250, 246, 239, 0.35);
+        }
+
+        .pred-empty {
+            text-align: center;
+            padding: 40px;
+            font-family: var(--font-body);
+            font-style: italic;
+            color: var(--blush-pink);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav class="nav-bar">
+        <a href="/">✦ Home</a><span class="nav-separator">|</span>
+        <a href="/admin.html">🔑 Royal Decrees</a><span class="nav-separator">|</span>
+        <a href="/chamber.html">👑 Chamber</a><span class="nav-separator">|</span>
+        <a href="/translator.html">🪶 Translator</a><span class="nav-separator">|</span>
+        <a href="/polls.html">🗳️ Polls</a><span class="nav-separator">|</span>
+        <a href="/teaspill.html">🫖 Tea</a><span class="nav-separator">|</span>
+        <a href="/quiz.html">🎭 Quiz</a><span class="nav-separator">|</span>
+        <a href="/predictions.html" class="active">🏆 Predictions</a><span class="nav-separator">|</span>
+        <a href="/episodes.html">📅 Episodes</a>
+    </nav>
+
+    <div class="pred-page">
+        <div class="pred-container">
+            <div class="pred-header">
+                <div class="icon">🏆</div>
+                <h1>Prediction Game</h1>
+                <p>Predict the twists of Season 4 — bragging rights await the oracles among us</p>
+            </div>
+
+            <div class="pred-form">
+                <label>Your Name</label>
+                <input type="text" id="pred-name" placeholder="e.g. The Oracle of Mayfair">
+                <label>Category</label>
+                <select id="pred-category">
+                    <option value="romance">💕 Romance</option>
+                    <option value="scandal">🫖 Scandal</option>
+                    <option value="plot">🎭 Plot Twist</option>
+                    <option value="general">✨ General</option>
+                </select>
+                <label>Your Prediction</label>
+                <textarea id="pred-text" placeholder="I predict that Benedict shall..." maxlength="500"></textarea>
+                <button class="btn-predict" id="pred-btn">🏆 Submit Prediction</button>
+                <div class="status-msg" id="pred-status"></div>
+            </div>
+
+            <div class="pred-list" id="pred-list">
+                <div class="pred-empty">No predictions yet. Be the first oracle! 🔮</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Particles
+        const canvas = document.getElementById('particles-canvas'), ctx = canvas.getContext('2d'); let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
+        class Particle { constructor() { this.reset() } reset() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + .5; this.speedX = (Math.random() - .5) * .2; this.speedY = -(Math.random() * .3 + .05); this.opacity = Math.random() * .35 + .05; this.fadeDir = Math.random() > .5 ? .002 : -.002; this.color = ['rgba(201,168,76,', 'rgba(196,180,212,', 'rgba(232,196,200,'][Math.floor(Math.random() * 3)] } update() { this.x += this.speedX; this.y += this.speedY; this.opacity += this.fadeDir; if (this.opacity <= .03 || this.opacity >= .4) this.fadeDir *= -1; if (this.y < -10) { this.reset(); this.y = canvas.height + 10 } } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color + this.opacity + ')'; ctx.fill() } }
+        resizeCanvas(); for (let i = 0; i < 25; i++)particles.push(new Particle());
+        (function a() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw() }); requestAnimationFrame(a) })();
+        window.addEventListener('resize', resizeCanvas);
+
+        const predStatus = document.getElementById('pred-status');
+
+        async function loadPredictions() {
+            try {
+                const res = await fetch('/api/predictions');
+                const data = await res.json();
+                renderPredictions(data.predictions || []);
+            } catch { }
+        }
+
+        function renderPredictions(preds) {
+            const list = document.getElementById('pred-list');
+            if (!preds.length) { list.innerHTML = '<div class="pred-empty">No predictions yet. Be the first oracle! 🔮</div>'; return; }
+            list.innerHTML = preds.map(p => `
+                <div class="pred-entry">
+                    <span class="pred-category ${p.category}">${{ romance: '💕 Romance', scandal: '🫖 Scandal', plot: '🎭 Plot Twist', general: '✨ General' }[p.category] || p.category}</span>
+                    <div class="pred-text">"${p.prediction}"</div>
+                    <div class="pred-meta">
+                        <span class="pred-author">— ${p.name}</span>
+                        <span class="pred-time">${new Date(p.created_at).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('pred-btn').addEventListener('click', async () => {
+            const name = document.getElementById('pred-name').value.trim();
+            const prediction = document.getElementById('pred-text').value.trim();
+            const category = document.getElementById('pred-category').value;
+            if (!prediction) { showStatus('A prediction is required, Your Grace.', 'error'); return; }
+
+            const btn = document.getElementById('pred-btn');
+            btn.disabled = true; btn.textContent = 'Consulting the stars...';
+
+            try {
+                const res = await fetch('/api/predictions', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, prediction, category }),
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showStatus('Your prediction has been recorded! The stars shall decide. 🔮', 'success');
+                    document.getElementById('pred-text').value = '';
+                    loadPredictions();
+                } else { showStatus(data.error || 'Failed.', 'error'); }
+            } catch { showStatus('Connection error.', 'error'); }
+            finally { btn.disabled = false; btn.textContent = '🏆 Submit Prediction'; }
+        });
+
+        function showStatus(msg, type) {
+            predStatus.textContent = msg; predStatus.className = `status-msg ${type}`;
+            setTimeout(() => { predStatus.className = 'status-msg'; }, 4000);
+        }
+
+        loadPredictions();
+    </script>
+</body>
+
+</html>

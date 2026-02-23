@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🪶 Regency Translator — Bridgerton Watch Party</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .translator-page {
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding: 80px 20px 60px;
+            background: radial-gradient(ellipse at 30% 20%, rgba(196, 180, 212, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(232, 196, 200, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, var(--midnight) 0%, var(--deep-navy) 100%);
+        }
+
+        .translator-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .translator-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .translator-header .icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .translator-header h1 {
+            font-family: var(--font-script);
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 400;
+            background: linear-gradient(135deg, var(--pale-gold), var(--champagne-gold), var(--bright-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .translator-header p {
+            font-family: var(--font-body);
+            font-style: italic;
+            color: var(--blush-pink);
+            font-size: 1rem;
+        }
+
+        .translator-card {
+            background: rgba(26, 31, 58, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 24px;
+            padding: 36px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .input-label {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--champagne-gold);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .translator-input {
+            width: 100%;
+            min-height: 120px;
+            padding: 18px;
+            border-radius: 16px;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            background: rgba(14, 18, 37, 0.8);
+            color: var(--cream);
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            outline: none;
+            resize: vertical;
+            transition: border-color 0.3s ease;
+            line-height: 1.7;
+            box-sizing: border-box;
+        }
+
+        .translator-input:focus {
+            border-color: var(--bright-gold);
+            box-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+        }
+
+        .translator-input::placeholder {
+            color: rgba(250, 246, 239, 0.3);
+        }
+
+        .char-count {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            color: rgba(250, 246, 239, 0.35);
+            text-align: right;
+            margin-top: 6px;
+        }
+
+        .btn-translate {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--champagne-gold);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.2), rgba(201, 168, 76, 0.08));
+            color: var(--bright-gold);
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 20px;
+        }
+
+        .btn-translate:hover {
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.35), rgba(201, 168, 76, 0.15));
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .btn-translate:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .result-section {
+            margin-top: 30px;
+            display: none;
+        }
+
+        .result-section.visible {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 20px;
+        }
+
+        .result-divider span {
+            color: var(--champagne-gold);
+            font-size: 0.85rem;
+            font-family: var(--font-body);
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            white-space: nowrap;
+        }
+
+        .result-divider .line {
+            flex: 1;
+            height: 1px;
+            background: rgba(201, 168, 76, 0.25);
+        }
+
+        .result-card {
+            background: rgba(201, 168, 76, 0.06);
+            border: 1px solid rgba(201, 168, 76, 0.2);
+            border-radius: 16px;
+            padding: 28px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .result-card::before {
+            content: '✒';
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 1.5rem;
+            opacity: 0.3;
+        }
+
+        .result-text {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            line-height: 1.9;
+            color: var(--cream);
+            font-style: italic;
+        }
+
+        .result-signature {
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            color: var(--champagne-gold);
+            text-align: right;
+            margin-top: 16px;
+            font-style: italic;
+        }
+
+        .examples {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(201, 168, 76, 0.12);
+        }
+
+        .examples-title {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: rgba(250, 246, 239, 0.4);
+            margin-bottom: 12px;
+        }
+
+        .example-chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .example-chip {
+            padding: 8px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(201, 168, 76, 0.2);
+            background: rgba(201, 168, 76, 0.05);
+            color: var(--cream);
+            font-family: var(--font-body);
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .example-chip:hover {
+            background: rgba(201, 168, 76, 0.15);
+            border-color: rgba(201, 168, 76, 0.4);
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav class="nav-bar">
+        <a href="/">✦ Home</a><span class="nav-separator">|</span>
+        <a href="/admin.html">🔑 Royal Decrees</a><span class="nav-separator">|</span>
+        <a href="/chamber.html">👑 Chamber</a><span class="nav-separator">|</span>
+        <a href="/translator.html" class="active">🪶 Translator</a><span class="nav-separator">|</span>
+        <a href="/polls.html">🗳️ Polls</a><span class="nav-separator">|</span>
+        <a href="/teaspill.html">🫖 Tea</a><span class="nav-separator">|</span>
+        <a href="/quiz.html">🎭 Quiz</a><span class="nav-separator">|</span>
+        <a href="/predictions.html">🏆 Predictions</a><span class="nav-separator">|</span>
+        <a href="/episodes.html">📅 Episodes</a>
+    </nav>
+
+    <div class="translator-page">
+        <div class="translator-container">
+            <div class="translator-header">
+                <div class="icon">🪶</div>
+                <h1>The Royal Translator</h1>
+                <p>Speak modern English, receive Regency-era eloquence worthy of the ton</p>
+            </div>
+
+            <div class="translator-card">
+                <label class="input-label">Your Modern Words</label>
+                <textarea class="translator-input" id="input-text"
+                    placeholder="Type something in modern English... e.g. 'Hey, want to come to my party tomorrow?'"
+                    maxlength="500"></textarea>
+                <div class="char-count"><span id="char-count">0</span> / 500</div>
+
+                <button class="btn-translate" id="translate-btn">🪶 Translate to Regency Era</button>
+
+                <div class="result-section" id="result-section">
+                    <div class="result-divider">
+                        <div class="line"></div>
+                        <span>✦ Regency Translation ✦</span>
+                        <div class="line"></div>
+                    </div>
+                    <div class="result-card">
+                        <div class="result-text" id="result-text"></div>
+                        <div class="result-signature">— Translated by the Royal Court Scribe 🪶</div>
+                    </div>
+                </div>
+
+                <div class="examples">
+                    <div class="examples-title">Try these examples</div>
+                    <div class="example-chips">
+                        <div class="example-chip" data-text="What's up? Want to hang out tonight?">What's up?</div>
+                        <div class="example-chip" data-text="OMG that was so dramatic I can't even">OMG so dramatic
+                        </div>
+                        <div class="example-chip" data-text="She totally ghosted him at the party">She ghosted him</div>
+                        <div class="example-chip" data-text="I need coffee before I can function today">I need coffee
+                        </div>
+                        <div class="example-chip" data-text="That outfit is fire, you look amazing">That outfit is fire
+                        </div>
+                        <div class="example-chip" data-text="No cap, this is the best show ever">Best show ever</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Particles
+        const canvas = document.getElementById('particles-canvas');
+        const ctx = canvas.getContext('2d'); let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
+        class Particle {
+            constructor() { this.reset(); }
+            reset() {
+                this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + 0.5;
+                this.speedX = (Math.random() - 0.5) * 0.2; this.speedY = -(Math.random() * 0.3 + 0.05); this.opacity = Math.random() * 0.35 + 0.05;
+                this.fadeDir = Math.random() > 0.5 ? 0.002 : -0.002;
+                this.color = ['rgba(201,168,76,', 'rgba(196,180,212,', 'rgba(232,196,200,'][Math.floor(Math.random() * 3)];
+            }
+            update() {
+                this.x += this.speedX; this.y += this.speedY; this.opacity += this.fadeDir;
+                if (this.opacity <= 0.03 || this.opacity >= 0.4) this.fadeDir *= -1; if (this.y < -10) { this.reset(); this.y = canvas.height + 10; }
+            }
+            draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color + this.opacity + ')'; ctx.fill(); }
+        }
+        resizeCanvas(); for (let i = 0; i < 25; i++)particles.push(new Particle());
+        (function a() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw() }); requestAnimationFrame(a) })();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Translator logic
+        const inputText = document.getElementById('input-text');
+        const charCount = document.getElementById('char-count');
+        const translateBtn = document.getElementById('translate-btn');
+        const resultSection = document.getElementById('result-section');
+        const resultText = document.getElementById('result-text');
+
+        inputText.addEventListener('input', () => { charCount.textContent = inputText.value.length; });
+
+        document.querySelectorAll('.example-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                inputText.value = chip.dataset.text;
+                charCount.textContent = inputText.value.length;
+                inputText.focus();
+            });
+        });
+
+        translateBtn.addEventListener('click', async () => {
+            const text = inputText.value.trim();
+            if (!text) return;
+
+            translateBtn.disabled = true;
+            translateBtn.textContent = '🪶 The scribe is writing...';
+            resultSection.classList.remove('visible');
+
+            try {
+                const res = await fetch('/api/translate', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text }),
+                });
+                const data = await res.json();
+
+                if (data.error) {
+                    resultText.textContent = data.error;
+                } else {
+                    resultText.textContent = data.translated;
+                }
+                resultSection.classList.add('visible');
+            } catch {
+                resultText.textContent = 'The royal translator is unavailable. How vexing.';
+                resultSection.classList.add('visible');
+            } finally {
+                translateBtn.disabled = false;
+                translateBtn.textContent = '🪶 Translate to Regency Era';
+            }
+        });
+    </script>
+</body>
+
+</html>

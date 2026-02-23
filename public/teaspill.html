@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🫖 Tea Spill Board — Bridgerton Watch Party</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .tea-page {
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding: 80px 20px 60px;
+            background: radial-gradient(ellipse at 30% 20%, rgba(196, 180, 212, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(232, 196, 200, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, var(--midnight) 0%, var(--deep-navy) 100%);
+        }
+
+        .tea-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .tea-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .tea-header .icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .tea-header h1 {
+            font-family: var(--font-script);
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 400;
+            background: linear-gradient(135deg, var(--pale-gold), var(--champagne-gold), var(--bright-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .tea-header p {
+            font-family: var(--font-body);
+            font-style: italic;
+            color: var(--blush-pink);
+            font-size: 1rem;
+        }
+
+        .spill-form {
+            background: rgba(26, 31, 58, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 32px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .spill-form label {
+            display: block;
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--champagne-gold);
+            margin-bottom: 10px;
+        }
+
+        .spill-form textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 16px;
+            border-radius: 14px;
+            border: 1px solid rgba(201, 168, 76, 0.3);
+            background: rgba(14, 18, 37, 0.8);
+            color: var(--cream);
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            outline: none;
+            resize: vertical;
+            line-height: 1.7;
+            box-sizing: border-box;
+        }
+
+        .spill-form textarea:focus {
+            border-color: var(--bright-gold);
+        }
+
+        .spill-form textarea::placeholder {
+            color: rgba(250, 246, 239, 0.3);
+        }
+
+        .spill-form input {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid rgba(201, 168, 76, 0.2);
+            background: rgba(14, 18, 37, 0.6);
+            color: var(--cream);
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            outline: none;
+            margin-top: 12px;
+            box-sizing: border-box;
+        }
+
+        .spill-form input::placeholder {
+            color: rgba(250, 246, 239, 0.25);
+        }
+
+        .btn-spill {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--champagne-gold);
+            border-radius: 12px;
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.2), rgba(201, 168, 76, 0.08));
+            color: var(--bright-gold);
+            font-family: var(--font-heading);
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: all 0.3s ease;
+        }
+
+        .btn-spill:hover {
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.35), rgba(201, 168, 76, 0.15));
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.2);
+            transform: translateY(-2px);
+        }
+
+        .status-msg {
+            text-align: center;
+            padding: 12px;
+            border-radius: 10px;
+            font-family: var(--font-body);
+            font-size: 0.95rem;
+            margin-top: 12px;
+            display: none;
+        }
+
+        .status-msg.success {
+            display: block;
+            background: rgba(102, 187, 106, 0.15);
+            border: 1px solid rgba(102, 187, 106, 0.3);
+            color: #81c784;
+        }
+
+        .status-msg.error {
+            display: block;
+            background: rgba(244, 67, 54, 0.15);
+            border: 1px solid rgba(244, 67, 54, 0.3);
+            color: #ef9a9a;
+        }
+
+        .tea-wall {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .tea-entry {
+            background: rgba(26, 31, 58, 0.5);
+            border: 1px solid rgba(232, 196, 200, 0.15);
+            border-radius: 18px;
+            padding: 24px;
+            position: relative;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .tea-entry::before {
+            content: '🫖';
+            position: absolute;
+            top: -8px;
+            right: 16px;
+            font-size: 1.4rem;
+        }
+
+        .tea-content {
+            font-family: var(--font-body);
+            font-size: 1.05rem;
+            line-height: 1.8;
+            color: var(--cream);
+            font-style: italic;
+            margin-bottom: 12px;
+        }
+
+        .tea-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tea-alias {
+            font-family: var(--font-heading);
+            font-size: 0.85rem;
+            color: var(--champagne-gold);
+        }
+
+        .tea-time {
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            color: rgba(250, 246, 239, 0.35);
+        }
+
+        .tea-empty {
+            text-align: center;
+            padding: 40px;
+            font-family: var(--font-body);
+            font-style: italic;
+            color: var(--blush-pink);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav class="nav-bar">
+        <a href="/">✦ Home</a><span class="nav-separator">|</span>
+        <a href="/admin.html">🔑 Royal Decrees</a><span class="nav-separator">|</span>
+        <a href="/chamber.html">👑 Chamber</a><span class="nav-separator">|</span>
+        <a href="/translator.html">🪶 Translator</a><span class="nav-separator">|</span>
+        <a href="/polls.html">🗳️ Polls</a><span class="nav-separator">|</span>
+        <a href="/teaspill.html" class="active">🫖 Tea</a><span class="nav-separator">|</span>
+        <a href="/quiz.html">🎭 Quiz</a><span class="nav-separator">|</span>
+        <a href="/predictions.html">🏆 Predictions</a><span class="nav-separator">|</span>
+        <a href="/episodes.html">📅 Episodes</a>
+    </nav>
+
+    <div class="tea-page">
+        <div class="tea-container">
+            <div class="tea-header">
+                <div class="icon">🫖</div>
+                <h1>The Tea Spill Board</h1>
+                <p>Share your most scandalous thoughts — anonymously, of course</p>
+            </div>
+
+            <div class="spill-form">
+                <label>Spill Your Tea</label>
+                <textarea id="tea-input" placeholder="Dear Reader, I simply must confess..." maxlength="500"></textarea>
+                <input type="text" id="tea-alias"
+                    placeholder="Your alias (optional — default: Anonymous Member of the Ton)">
+                <button class="btn-spill" id="spill-btn">🫖 Spill the Tea</button>
+                <div class="status-msg" id="spill-status"></div>
+            </div>
+
+            <div class="tea-wall" id="tea-wall">
+                <div class="tea-empty">The tea pot is empty. Be the first to spill! 🫖</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Particles
+        const canvas = document.getElementById('particles-canvas'), ctx = canvas.getContext('2d'); let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
+        class Particle { constructor() { this.reset() } reset() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + .5; this.speedX = (Math.random() - .5) * .2; this.speedY = -(Math.random() * .3 + .05); this.opacity = Math.random() * .35 + .05; this.fadeDir = Math.random() > .5 ? .002 : -.002; this.color = ['rgba(201,168,76,', 'rgba(196,180,212,', 'rgba(232,196,200,'][Math.floor(Math.random() * 3)] } update() { this.x += this.speedX; this.y += this.speedY; this.opacity += this.fadeDir; if (this.opacity <= .03 || this.opacity >= .4) this.fadeDir *= -1; if (this.y < -10) { this.reset(); this.y = canvas.height + 10 } } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color + this.opacity + ')'; ctx.fill() } }
+        resizeCanvas(); for (let i = 0; i < 25; i++)particles.push(new Particle());
+        (function a() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw() }); requestAnimationFrame(a) })();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Tea Spill
+        const spillStatus = document.getElementById('spill-status');
+
+        async function loadTea() {
+            try {
+                const res = await fetch('/api/teaspill');
+                const data = await res.json();
+                renderTea(data.entries || []);
+            } catch { }
+        }
+
+        function renderTea(entries) {
+            const wall = document.getElementById('tea-wall');
+            if (entries.length === 0) {
+                wall.innerHTML = '<div class="tea-empty">The tea pot is empty. Be the first to spill! 🫖</div>';
+                return;
+            }
+            wall.innerHTML = entries.map(e => `
+                <div class="tea-entry">
+                    <div class="tea-content">"${e.content}"</div>
+                    <div class="tea-meta">
+                        <span class="tea-alias">— ${e.alias}</span>
+                        <span class="tea-time">${new Date(e.created_at).toLocaleDateString()}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        document.getElementById('spill-btn').addEventListener('click', async () => {
+            const content = document.getElementById('tea-input').value.trim();
+            const alias = document.getElementById('tea-alias').value.trim();
+            if (!content) { showStatus('One cannot spill empty tea, darling.', 'error'); return; }
+
+            const btn = document.getElementById('spill-btn');
+            btn.disabled = true; btn.textContent = 'Spilling...';
+
+            try {
+                const res = await fetch('/api/teaspill', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content, alias }),
+                });
+                const data = await res.json();
+                if (data.success) {
+                    showStatus('Tea has been spilled! The ton shall be scandalized. 🫖', 'success');
+                    document.getElementById('tea-input').value = '';
+                    document.getElementById('tea-alias').value = '';
+                    loadTea();
+                } else { showStatus(data.error || 'Failed to spill.', 'error'); }
+            } catch { showStatus('Connection error.', 'error'); }
+            finally { btn.disabled = false; btn.textContent = '🫖 Spill the Tea'; }
+        });
+
+        function showStatus(msg, type) {
+            spillStatus.textContent = msg; spillStatus.className = `status-msg ${type}`;
+            setTimeout(() => { spillStatus.className = 'status-msg'; }, 4000);
+        }
+
+        loadTea();
+    </script>
+</body>
+
+</html>

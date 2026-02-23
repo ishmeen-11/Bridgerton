@@ -12,62 +12,17 @@
         rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        /* ─── Chamber Page Styles ─── */
         .chamber-page {
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             position: relative;
             z-index: 1;
-            background:
-                radial-gradient(ellipse at 30% 20%, rgba(196, 180, 212, 0.12) 0%, transparent 50%),
+            background: radial-gradient(ellipse at 30% 20%, rgba(196, 180, 212, 0.12) 0%, transparent 50%),
                 radial-gradient(ellipse at 70% 80%, rgba(232, 196, 200, 0.08) 0%, transparent 50%),
-                radial-gradient(ellipse at 50% 50%, rgba(107, 140, 174, 0.1) 0%, transparent 60%),
                 linear-gradient(180deg, var(--midnight) 0%, var(--deep-navy) 100%);
         }
 
-        /* Nav */
-        .nav-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 32px;
-            padding: 14px 20px;
-            background: linear-gradient(180deg, rgba(14, 18, 37, 0.97) 0%, rgba(14, 18, 37, 0.85) 100%);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(201, 168, 76, 0.15);
-        }
-
-        .nav-bar a {
-            font-family: var(--font-body);
-            color: var(--cream);
-            text-decoration: none;
-            font-size: 0.95rem;
-            letter-spacing: 0.12em;
-            text-transform: uppercase;
-            opacity: 0.7;
-            transition: opacity 0.3s ease, color 0.3s ease;
-        }
-
-        .nav-bar a:hover,
-        .nav-bar a.active {
-            opacity: 1;
-            color: var(--bright-gold);
-        }
-
-        .nav-separator {
-            color: var(--champagne-gold);
-            opacity: 0.3;
-            font-size: 0.8rem;
-        }
-
-        /* Gate */
         .gate-container {
             flex: 1;
             display: flex;
@@ -81,7 +36,6 @@
             width: 100%;
             background: rgba(26, 31, 58, 0.65);
             backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
             border: 1px solid rgba(201, 168, 76, 0.25);
             border-radius: 24px;
             padding: 48px 36px;
@@ -139,6 +93,7 @@
             font-size: 1.05rem;
             outline: none;
             transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
         }
 
         .form-group input:focus {
@@ -191,13 +146,11 @@
             color: #ef9a9a;
         }
 
-        /* ─── Chat Room Layout ─── */
         .chat-room {
             display: none;
             flex: 1;
             flex-direction: column;
             padding-top: 56px;
-            /* nav height */
             height: 100vh;
         }
 
@@ -234,49 +187,6 @@
             overflow: hidden;
         }
 
-        /* Sidebar */
-        .chat-sidebar {
-            width: 220px;
-            border-right: 1px solid rgba(201, 168, 76, 0.12);
-            background: rgba(14, 18, 37, 0.5);
-            padding: 20px 16px;
-            overflow-y: auto;
-            flex-shrink: 0;
-        }
-
-        .sidebar-title {
-            font-family: var(--font-heading);
-            font-size: 0.85rem;
-            text-transform: uppercase;
-            letter-spacing: 0.15em;
-            color: var(--champagne-gold);
-            margin-bottom: 14px;
-        }
-
-        .online-list {
-            list-style: none;
-        }
-
-        .online-user {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 0;
-            font-family: var(--font-body);
-            font-size: 1rem;
-            color: var(--cream);
-        }
-
-        .online-dot {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background: #66bb6a;
-            box-shadow: 0 0 8px rgba(102, 187, 106, 0.5);
-            flex-shrink: 0;
-        }
-
-        /* Messages area */
         .messages-area {
             flex: 1;
             overflow-y: auto;
@@ -352,7 +262,6 @@
             text-align: right;
         }
 
-        /* Input area */
         .chat-input-area {
             display: flex;
             gap: 12px;
@@ -402,7 +311,6 @@
             box-shadow: 0 0 20px rgba(201, 168, 76, 0.2);
         }
 
-        /* Welcome banner inside chat */
         .chat-welcome {
             text-align: center;
             padding: 30px 20px;
@@ -423,12 +331,14 @@
             margin-bottom: 8px;
         }
 
-        /* ─── Responsive ─── */
-        @media (max-width: 768px) {
-            .chat-sidebar {
-                display: none;
-            }
+        .polling-indicator {
+            font-size: 0.75rem;
+            color: rgba(102, 187, 106, 0.8);
+            text-align: center;
+            padding: 4px;
+        }
 
+        @media (max-width: 768px) {
             .chat-input-area {
                 padding: 12px 16px;
             }
@@ -444,11 +354,6 @@
             .gate-card {
                 padding: 36px 24px;
             }
-
-            .nav-bar {
-                gap: 16px;
-                font-size: 0.85rem;
-            }
         }
     </style>
 </head>
@@ -461,7 +366,19 @@
         <span class="nav-separator">|</span>
         <a href="/admin.html">🔑 Royal Decrees</a>
         <span class="nav-separator">|</span>
-        <a href="/chamber.html" class="active">👑 Queen's Chamber</a>
+        <a href="/chamber.html" class="active">👑 Chamber</a>
+        <span class="nav-separator">|</span>
+        <a href="/translator.html">🪶 Translator</a>
+        <span class="nav-separator">|</span>
+        <a href="/polls.html">🗳️ Polls</a>
+        <span class="nav-separator">|</span>
+        <a href="/teaspill.html">🫖 Tea</a>
+        <span class="nav-separator">|</span>
+        <a href="/quiz.html">🎭 Quiz</a>
+        <span class="nav-separator">|</span>
+        <a href="/predictions.html">🏆 Predictions</a>
+        <span class="nav-separator">|</span>
+        <a href="/episodes.html">📅 Episodes</a>
     </nav>
 
     <!-- Gate: Enter name + invitation code -->
@@ -471,7 +388,6 @@
                 <div class="gate-crown">👑</div>
                 <h1>Queen's Chamber</h1>
                 <p class="gate-subtitle">Wine, tea, and gossip so scandalous even Lady Whistledown would gasp</p>
-
                 <div class="form-group">
                     <label>Your Name</label>
                     <input type="text" id="entry-name" placeholder="e.g. Princess Rishika">
@@ -492,16 +408,10 @@
         <div class="chat-header">
             <h2>👑 The Queen's Chamber</h2>
             <p class="chat-tagline">Sip your tea. Spill the gossip. What happens here stays here... mostly. 🍷</p>
+            <div class="polling-indicator" id="poll-indicator">🟢 Connected — messages refresh every 3 seconds</div>
         </div>
 
         <div class="chat-body">
-            <aside class="chat-sidebar">
-                <h3 class="sidebar-title">👑 In the Chamber</h3>
-                <ul class="online-list" id="online-list">
-                    <!-- populated by socket -->
-                </ul>
-            </aside>
-
             <div class="messages-area" id="messages-area">
                 <div class="chat-welcome">
                     <div class="welcome-emoji">🍷🫖✨</div>
@@ -519,13 +429,10 @@
         </div>
     </div>
 
-    <script src="/socket.io/socket.io.js"></script>
     <script>
-        // ─── Particles (lightweight) ───
+        // ─── Particles ───
         const canvas = document.getElementById('particles-canvas');
-        const ctx = canvas.getContext('2d');
-        let particles = [];
-        const PARTICLE_COUNT = 25;
+        const ctx = canvas.getContext('2d'); let particles = []; const PARTICLE_COUNT = 25;
         function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
         class Particle {
             constructor() { this.reset(); }
@@ -558,153 +465,97 @@
         const gateError = document.getElementById('gate-error');
         const messagesArea = document.getElementById('messages-area');
         const chatInput = document.getElementById('chat-input');
-        const onlineList = document.getElementById('online-list');
 
         let myName = '';
         let myCode = '';
-        let socket;
+        let lastMessageCount = 0;
+        let pollInterval;
 
         // ─── Gate Logic ───
         document.getElementById('enter-chamber-btn').addEventListener('click', enterChamber);
-        document.getElementById('entry-code').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') enterChamber();
-        });
-        document.getElementById('entry-name').addEventListener('keydown', (e) => {
-            if (e.key === 'Enter') document.getElementById('entry-code').focus();
-        });
+        document.getElementById('entry-code').addEventListener('keydown', (e) => { if (e.key === 'Enter') enterChamber(); });
+        document.getElementById('entry-name').addEventListener('keydown', (e) => { if (e.key === 'Enter') document.getElementById('entry-code').focus(); });
 
         function enterChamber() {
             const name = document.getElementById('entry-name').value.trim();
             const code = document.getElementById('entry-code').value.trim().toUpperCase();
-
-            if (!name || !code) {
-                showError('Both your name and invitation code are required, darling.');
-                return;
-            }
+            if (!name || !code) { showError('Both your name and invitation code are required, darling.'); return; }
 
             fetch('/api/validate-code', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name, code }),
-            })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.error) {
-                        showError(data.error);
-                    } else {
-                        myName = name;
-                        myCode = code;
-                        openChat();
-                    }
-                })
-                .catch(() => showError('Connection error. The court is unreachable.'));
+            }).then(r => r.json()).then(data => {
+                if (data.error) { showError(data.error); }
+                else { myName = name; myCode = code; openChat(); }
+            }).catch(() => showError('Connection error. The court is unreachable.'));
         }
 
-        function showError(msg) {
-            gateError.textContent = msg;
-            gateError.className = 'status-msg error';
-        }
+        function showError(msg) { gateError.textContent = msg; gateError.className = 'status-msg error'; }
 
-        // ─── Open Chat ───
+        // ─── Open Chat (Polling-based) ───
         function openChat() {
             gatePage.style.display = 'none';
             chatRoom.classList.add('active');
+            loadMessages();
+            pollInterval = setInterval(loadMessages, 3000);
 
-            // Load history
-            fetch('/api/messages', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code: myCode }),
-            })
-                .then(r => r.json())
-                .then(data => {
-                    if (data.messages) {
-                        data.messages.forEach(msg => appendMessage(msg));
-                    }
-                    scrollToBottom();
-                });
-
-            // Connect socket
-            socket = io();
-
-            socket.emit('join-chamber', { name: myName, code: myCode });
-
-            socket.on('chat-message', (msg) => {
-                appendMessage(msg);
-                scrollToBottom();
-            });
-
-            socket.on('online-users', (users) => {
-                onlineList.innerHTML = users.map(u =>
-                    `<li class="online-user"><span class="online-dot"></span>${u}</li>`
-                ).join('');
-            });
-
-            socket.on('error-msg', (msg) => {
-                alert(msg);
-            });
-
-            // Send message
             document.getElementById('send-btn').addEventListener('click', sendMessage);
-            chatInput.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' && !e.shiftKey) {
-                    e.preventDefault();
-                    sendMessage();
-                }
-            });
-
+            chatInput.addEventListener('keydown', (e) => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } });
             chatInput.focus();
+        }
+
+        function loadMessages() {
+            fetch('/api/messages', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: myCode }),
+            }).then(r => r.json()).then(data => {
+                if (data.messages && data.messages.length !== lastMessageCount) {
+                    // Clear and re-render
+                    const welcome = messagesArea.querySelector('.chat-welcome');
+                    messagesArea.innerHTML = '';
+                    if (welcome) messagesArea.appendChild(welcome);
+                    data.messages.forEach(msg => appendMessage(msg));
+                    lastMessageCount = data.messages.length;
+                    scrollToBottom();
+                }
+            }).catch(() => { });
         }
 
         function sendMessage() {
             const content = chatInput.value.trim();
             if (!content) return;
-            socket.emit('send-message', { content });
-            chatInput.value = '';
-            chatInput.focus();
+
+            const btn = document.getElementById('send-btn');
+            btn.disabled = true; btn.textContent = '...';
+
+            fetch('/api/chat-send', {
+                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code: myCode, name: myName, content }),
+            }).then(r => r.json()).then(() => {
+                chatInput.value = '';
+                loadMessages(); // Immediate refresh
+            }).catch(() => { }).finally(() => { btn.disabled = false; btn.textContent = 'Send ✉'; chatInput.focus(); });
         }
 
         function appendMessage(msg) {
             const div = document.createElement('div');
-
             if (msg.system) {
-                div.className = 'msg-bubble system';
-                div.textContent = msg.content;
+                div.className = 'msg-bubble system'; div.textContent = msg.content;
             } else {
                 const isMine = msg.sender_name === myName;
                 div.className = `msg-bubble ${isMine ? 'mine' : 'other'}`;
-
-                const senderEl = document.createElement('div');
-                senderEl.className = 'msg-sender';
+                const senderEl = document.createElement('div'); senderEl.className = 'msg-sender';
                 senderEl.textContent = isMine ? 'You' : msg.sender_name;
-
-                const contentEl = document.createElement('div');
-                contentEl.textContent = msg.content;
-
-                const timeEl = document.createElement('div');
-                timeEl.className = 'msg-time';
+                const contentEl = document.createElement('div'); contentEl.textContent = msg.content;
+                const timeEl = document.createElement('div'); timeEl.className = 'msg-time';
                 timeEl.textContent = formatTime(msg.created_at);
-
-                div.appendChild(senderEl);
-                div.appendChild(contentEl);
-                div.appendChild(timeEl);
+                div.appendChild(senderEl); div.appendChild(contentEl); div.appendChild(timeEl);
             }
-
             messagesArea.appendChild(div);
         }
 
-        function scrollToBottom() {
-            messagesArea.scrollTop = messagesArea.scrollHeight;
-        }
-
-        function formatTime(iso) {
-            try {
-                const d = new Date(iso);
-                return d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-            } catch {
-                return '';
-            }
-        }
+        function scrollToBottom() { messagesArea.scrollTop = messagesArea.scrollHeight; }
+        function formatTime(iso) { try { return new Date(iso).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }); } catch { return ''; } }
     </script>
 </body>
 

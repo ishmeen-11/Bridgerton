@@ -1,16 +1,17 @@
 # Netlify Configuration — Bridgerton Watch Party
 
 [build]
-  publish = "public"              # Static files served from public/
-  functions = "netlify/functions"  # Serverless functions directory
-  command = "npm install"          # Install dependencies (needed for functions)
+  publish = "public"
+  functions = "netlify/functions"
+  command = "npm install"
 
 [functions]
   node_bundler = "esbuild"
   external_node_modules = ["@netlify/blobs"]
   included_files = ["netlify/functions/**"]
 
-# Redirect API calls to Netlify Functions
+# ─── API Redirects ───
+
 [[redirects]]
   from = "/api/invite"
   to = "/.netlify/functions/invite"
@@ -29,4 +30,29 @@
 [[redirects]]
   from = "/api/messages"
   to = "/.netlify/functions/messages"
+  status = 200
+
+[[redirects]]
+  from = "/api/chat-send"
+  to = "/.netlify/functions/chat-send"
+  status = 200
+
+[[redirects]]
+  from = "/api/translate"
+  to = "/.netlify/functions/translate"
+  status = 200
+
+[[redirects]]
+  from = "/api/polls"
+  to = "/.netlify/functions/polls"
+  status = 200
+
+[[redirects]]
+  from = "/api/teaspill"
+  to = "/.netlify/functions/teaspill"
+  status = 200
+
+[[redirects]]
+  from = "/api/predictions"
+  to = "/.netlify/functions/predictions"
   status = 200

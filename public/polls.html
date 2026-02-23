@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🗳️ Gossip Polls — Bridgerton Watch Party</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .polls-page {
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding: 80px 20px 60px;
+            background: radial-gradient(ellipse at 30% 20%, rgba(196, 180, 212, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(232, 196, 200, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, var(--midnight) 0%, var(--deep-navy) 100%);
+        }
+
+        .polls-container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .polls-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .polls-header .icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .polls-header h1 {
+            font-family: var(--font-script);
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 400;
+            background: linear-gradient(135deg, var(--pale-gold), var(--champagne-gold), var(--bright-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .polls-header p {
+            font-family: var(--font-body);
+            font-style: italic;
+            color: var(--blush-pink);
+            font-size: 1rem;
+        }
+
+        .poll-card {
+            background: rgba(26, 31, 58, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 24px;
+            padding: 32px;
+            margin-bottom: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .poll-question {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            color: var(--cream);
+            margin-bottom: 20px;
+            line-height: 1.5;
+        }
+
+        .poll-option {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px 18px;
+            margin-bottom: 10px;
+            border-radius: 14px;
+            border: 1px solid rgba(201, 168, 76, 0.15);
+            background: rgba(14, 18, 37, 0.5);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .poll-option:hover {
+            border-color: rgba(201, 168, 76, 0.4);
+            background: rgba(201, 168, 76, 0.08);
+        }
+
+        .poll-option.voted {
+            cursor: default;
+        }
+
+        .poll-option .bar {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, rgba(201, 168, 76, 0.15), rgba(201, 168, 76, 0.05));
+            border-radius: 14px;
+            transition: width 0.8s ease;
+            z-index: 0;
+        }
+
+        .poll-option .label {
+            font-family: var(--font-body);
+            font-size: 1rem;
+            color: var(--cream);
+            position: relative;
+            z-index: 1;
+            flex: 1;
+        }
+
+        .poll-option .votes {
+            font-family: var(--font-heading);
+            font-size: 0.9rem;
+            color: var(--champagne-gold);
+            position: relative;
+            z-index: 1;
+            min-width: 40px;
+            text-align: right;
+        }
+
+        .poll-total {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            color: rgba(250, 246, 239, 0.4);
+            text-align: right;
+            margin-top: 8px;
+            font-style: italic;
+        }
+
+        .voted-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(102, 187, 106, 0.15);
+            border: 1px solid rgba(102, 187, 106, 0.3);
+            color: #81c784;
+            font-family: var(--font-body);
+            font-size: 0.8rem;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav class="nav-bar">
+        <a href="/">✦ Home</a><span class="nav-separator">|</span>
+        <a href="/admin.html">🔑 Royal Decrees</a><span class="nav-separator">|</span>
+        <a href="/chamber.html">👑 Chamber</a><span class="nav-separator">|</span>
+        <a href="/translator.html">🪶 Translator</a><span class="nav-separator">|</span>
+        <a href="/polls.html" class="active">🗳️ Polls</a><span class="nav-separator">|</span>
+        <a href="/teaspill.html">🫖 Tea</a><span class="nav-separator">|</span>
+        <a href="/quiz.html">🎭 Quiz</a><span class="nav-separator">|</span>
+        <a href="/predictions.html">🏆 Predictions</a><span class="nav-separator">|</span>
+        <a href="/episodes.html">📅 Episodes</a>
+    </nav>
+
+    <div class="polls-page">
+        <div class="polls-container">
+            <div class="polls-header">
+                <div class="icon">🗳️</div>
+                <h1>Gossip Polls</h1>
+                <p>Cast your vote, darling — the ton demands to know your opinions</p>
+            </div>
+            <div id="polls-list">
+                <p
+                    style="text-align:center; color: var(--blush-pink); font-family: var(--font-body); font-style: italic;">
+                    Loading the ballots...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Particles
+        const canvas = document.getElementById('particles-canvas'); const ctx = canvas.getContext('2d'); let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
+        class Particle { constructor() { this.reset() } reset() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + .5; this.speedX = (Math.random() - .5) * .2; this.speedY = -(Math.random() * .3 + .05); this.opacity = Math.random() * .35 + .05; this.fadeDir = Math.random() > .5 ? .002 : -.002; this.color = ['rgba(201,168,76,', 'rgba(196,180,212,', 'rgba(232,196,200,'][Math.floor(Math.random() * 3)] } update() { this.x += this.speedX; this.y += this.speedY; this.opacity += this.fadeDir; if (this.opacity <= .03 || this.opacity >= .4) this.fadeDir *= -1; if (this.y < -10) { this.reset(); this.y = canvas.height + 10 } } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color + this.opacity + ')'; ctx.fill() } }
+        resizeCanvas(); for (let i = 0; i < 25; i++)particles.push(new Particle());
+        (function a() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw() }); requestAnimationFrame(a) })();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Polls
+        const votedPolls = JSON.parse(localStorage.getItem('bridgerton-voted-polls') || '{}');
+
+        async function loadPolls() {
+            try {
+                const res = await fetch('/api/polls');
+                const data = await res.json();
+                renderPolls(data.polls || []);
+            } catch { document.getElementById('polls-list').innerHTML = '<p style="text-align:center;color:#ef9a9a;">Failed to load polls.</p>'; }
+        }
+
+        function renderPolls(polls) {
+            const container = document.getElementById('polls-list');
+            container.innerHTML = polls.map(poll => {
+                const totalVotes = poll.votes.reduce((a, b) => a + b, 0);
+                const hasVoted = votedPolls[poll.id] !== undefined;
+                return `<div class="poll-card">
+                    <div class="poll-question">${poll.question}</div>
+                    ${poll.options.map((opt, i) => {
+                    const pct = totalVotes > 0 ? Math.round((poll.votes[i] / totalVotes) * 100) : 0;
+                    return `<div class="poll-option ${hasVoted ? 'voted' : ''}" data-poll="${poll.id}" data-idx="${i}" ${hasVoted ? '' : 'onclick="vote(this)"'}>
+                            <div class="bar" style="width: ${hasVoted ? pct : 0}%"></div>
+                            <span class="label">${opt}</span>
+                            <span class="votes">${hasVoted ? pct + '%' : ''}</span>
+                        </div>`;
+                }).join('')}
+                    <div class="poll-total">${totalVotes} vote${totalVotes !== 1 ? 's' : ''} cast</div>
+                    ${hasVoted ? '<span class="voted-badge">✓ You voted</span>' : ''}
+                </div>`;
+            }).join('');
+        }
+
+        async function vote(el) {
+            const pollId = el.dataset.poll;
+            const optionIndex = parseInt(el.dataset.idx);
+            if (votedPolls[pollId] !== undefined) return;
+
+            try {
+                const res = await fetch('/api/polls', {
+                    method: 'POST', headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ pollId, optionIndex }),
+                });
+                const data = await res.json();
+                if (data.success) {
+                    votedPolls[pollId] = optionIndex;
+                    localStorage.setItem('bridgerton-voted-polls', JSON.stringify(votedPolls));
+                    renderPolls(data.polls);
+                }
+            } catch { }
+        }
+
+        loadPolls();
+    </script>
+</body>
+
+</html>

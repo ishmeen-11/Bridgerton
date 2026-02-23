@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎭 Character Quiz — Bridgerton Watch Party</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .quiz-page {
+            min-height: 100vh;
+            position: relative;
+            z-index: 1;
+            padding: 80px 20px 60px;
+            background: radial-gradient(ellipse at 30% 20%, rgba(196, 180, 212, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 70% 80%, rgba(232, 196, 200, 0.08) 0%, transparent 50%),
+                linear-gradient(180deg, var(--midnight) 0%, var(--deep-navy) 100%);
+        }
+
+        .quiz-container {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+
+        .quiz-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .quiz-header .icon {
+            font-size: 3rem;
+            margin-bottom: 12px;
+        }
+
+        .quiz-header h1 {
+            font-family: var(--font-script);
+            font-size: clamp(2.2rem, 5vw, 3.2rem);
+            font-weight: 400;
+            background: linear-gradient(135deg, var(--pale-gold), var(--champagne-gold), var(--bright-gold));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+
+        .quiz-header p {
+            font-family: var(--font-body);
+            font-style: italic;
+            color: var(--blush-pink);
+            font-size: 1rem;
+        }
+
+        .quiz-card {
+            background: rgba(26, 31, 58, 0.65);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(201, 168, 76, 0.25);
+            border-radius: 24px;
+            padding: 36px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: rgba(201, 168, 76, 0.15);
+            border-radius: 2px;
+            margin-bottom: 28px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--champagne-gold), var(--bright-gold));
+            border-radius: 2px;
+            transition: width 0.5s ease;
+        }
+
+        .question-num {
+            font-family: var(--font-body);
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            color: var(--champagne-gold);
+            margin-bottom: 12px;
+        }
+
+        .question-text {
+            font-family: var(--font-heading);
+            font-size: 1.3rem;
+            color: var(--cream);
+            line-height: 1.6;
+            margin-bottom: 24px;
+        }
+
+        .answer-option {
+            display: block;
+            width: 100%;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border-radius: 14px;
+            border: 1px solid rgba(201, 168, 76, 0.2);
+            background: rgba(14, 18, 37, 0.5);
+            color: var(--cream);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .answer-option:hover {
+            border-color: rgba(201, 168, 76, 0.5);
+            background: rgba(201, 168, 76, 0.1);
+            transform: translateX(6px);
+        }
+
+        .result-card {
+            display: none;
+            text-align: center;
+            animation: fadeIn 0.6s ease;
+        }
+
+        .result-card.visible {
+            display: block;
+        }
+
+        .result-emoji {
+            font-size: 4rem;
+            margin-bottom: 16px;
+        }
+
+        .result-name {
+            font-family: var(--font-script);
+            font-size: 2.4rem;
+            color: var(--bright-gold);
+            margin-bottom: 8px;
+        }
+
+        .result-desc {
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--cream);
+            font-style: italic;
+            margin-bottom: 24px;
+        }
+
+        .btn-retake {
+            padding: 14px 32px;
+            border-radius: 12px;
+            border: 1px solid var(--champagne-gold);
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.2), rgba(201, 168, 76, 0.08));
+            color: var(--bright-gold);
+            font-family: var(--font-heading);
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-retake:hover {
+            background: linear-gradient(135deg, rgba(201, 168, 76, 0.35), rgba(201, 168, 76, 0.15));
+            box-shadow: 0 0 30px rgba(201, 168, 76, 0.2);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="particles-canvas"></canvas>
+    <nav class="nav-bar">
+        <a href="/">✦ Home</a><span class="nav-separator">|</span>
+        <a href="/admin.html">🔑 Royal Decrees</a><span class="nav-separator">|</span>
+        <a href="/chamber.html">👑 Chamber</a><span class="nav-separator">|</span>
+        <a href="/translator.html">🪶 Translator</a><span class="nav-separator">|</span>
+        <a href="/polls.html">🗳️ Polls</a><span class="nav-separator">|</span>
+        <a href="/teaspill.html">🫖 Tea</a><span class="nav-separator">|</span>
+        <a href="/quiz.html" class="active">🎭 Quiz</a><span class="nav-separator">|</span>
+        <a href="/predictions.html">🏆 Predictions</a><span class="nav-separator">|</span>
+        <a href="/episodes.html">📅 Episodes</a>
+    </nav>
+
+    <div class="quiz-page">
+        <div class="quiz-container">
+            <div class="quiz-header">
+                <div class="icon">🎭</div>
+                <h1>Which Bridgerton Are You?</h1>
+                <p>Answer 8 questions to discover your Bridgerton alter ego</p>
+            </div>
+
+            <div class="quiz-card">
+                <div id="quiz-content">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progress-fill" style="width: 12.5%"></div>
+                    </div>
+                    <div class="question-num" id="question-num">Question 1 of 8</div>
+                    <div class="question-text" id="question-text"></div>
+                    <div id="answers"></div>
+                </div>
+                <div class="result-card" id="result-card">
+                    <div class="result-emoji" id="result-emoji"></div>
+                    <div class="result-name" id="result-name"></div>
+                    <div class="result-desc" id="result-desc"></div>
+                    <button class="btn-retake" onclick="startQuiz()">🎭 Retake the Quiz</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Particles
+        const canvas = document.getElementById('particles-canvas'), ctx = canvas.getContext('2d'); let particles = [];
+        function resizeCanvas() { canvas.width = window.innerWidth; canvas.height = window.innerHeight }
+        class Particle { constructor() { this.reset() } reset() { this.x = Math.random() * canvas.width; this.y = Math.random() * canvas.height; this.size = Math.random() * 2 + .5; this.speedX = (Math.random() - .5) * .2; this.speedY = -(Math.random() * .3 + .05); this.opacity = Math.random() * .35 + .05; this.fadeDir = Math.random() > .5 ? .002 : -.002; this.color = ['rgba(201,168,76,', 'rgba(196,180,212,', 'rgba(232,196,200,'][Math.floor(Math.random() * 3)] } update() { this.x += this.speedX; this.y += this.speedY; this.opacity += this.fadeDir; if (this.opacity <= .03 || this.opacity >= .4) this.fadeDir *= -1; if (this.y < -10) { this.reset(); this.y = canvas.height + 10 } } draw() { ctx.beginPath(); ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); ctx.fillStyle = this.color + this.opacity + ')'; ctx.fill() } }
+        resizeCanvas(); for (let i = 0; i < 25; i++)particles.push(new Particle());
+        (function a() { ctx.clearRect(0, 0, canvas.width, canvas.height); particles.forEach(p => { p.update(); p.draw() }); requestAnimationFrame(a) })();
+        window.addEventListener('resize', resizeCanvas);
+
+        // Quiz Data
+        const questions = [
+            {
+                q: "At a grand ball, you would most likely be found...", a: [
+                    { text: "Dancing with every eligible person in the room", type: "daphne" },
+                    { text: "Sketching the scene from a quiet corner", type: "benedict" },
+                    { text: "Eavesdropping on the most scandalous conversation", type: "eloise" },
+                    { text: "Strategically positioning yourself near the host", type: "anthony" }]
+            },
+            {
+                q: "Your ideal evening involves...", a: [
+                    { text: "A romantic moonlit stroll through the garden", type: "daphne" },
+                    { text: "A lively debate with your closest friends", type: "eloise" },
+                    { text: "Secretly writing about everyone's escapades", type: "penelope" },
+                    { text: "Hosting an impeccable dinner party", type: "anthony" }]
+            },
+            {
+                q: "When faced with a scandal, you...", a: [
+                    { text: "Confront it head-on with grace and poise", type: "kate" },
+                    { text: "Use it as creative inspiration", type: "benedict" },
+                    { text: "Investigate every detail obsessively", type: "eloise" },
+                    { text: "Quietly document everything for later use", type: "penelope" }]
+            },
+            {
+                q: "Your greatest strength is...", a: [
+                    { text: "Your unwavering sense of duty", type: "anthony" },
+                    { text: "Your ability to see beauty in everything", type: "benedict" },
+                    { text: "Your fierce independence", type: "kate" },
+                    { text: "Your sharp wit and keen observation", type: "penelope" }]
+            },
+            {
+                q: "In matters of the heart, you believe...", a: [
+                    { text: "Love conquers all — it's worth every risk", type: "daphne" },
+                    { text: "Love should be practical and well-reasoned", type: "anthony" },
+                    { text: "Love finds you when you're busy being yourself", type: "colin" },
+                    { text: "Love is grand but independence is grander", type: "eloise" }]
+            },
+            {
+                q: "Your fashion philosophy is...", a: [
+                    { text: "Classic elegance that commands attention", type: "daphne" },
+                    { text: "Bold and unconventional — rules are for breaking", type: "benedict" },
+                    { text: "Comfortable and practical above all else", type: "eloise" },
+                    { text: "Understated but secretly the best-dressed in the room", type: "kate" }]
+            },
+            {
+                q: "Your friends would describe you as...", a: [
+                    { text: "The loyal one who always puts family first", type: "anthony" },
+                    { text: "The adventurous free spirit", type: "colin" },
+                    { text: "The one with the sharpest tongue", type: "kate" },
+                    { text: "The quiet observer who knows all the secrets", type: "penelope" }]
+            },
+            {
+                q: "If you could have any superpower, it would be...", a: [
+                    { text: "The ability to make anyone fall in love", type: "daphne" },
+                    { text: "Invisibility to observe without being seen", type: "penelope" },
+                    { text: "Time travel to experience every era", type: "benedict" },
+                    { text: "Mind reading to always know the truth", type: "eloise" }]
+            },
+        ];
+
+        const characters = {
+            daphne: { emoji: "👸", name: "Daphne Bridgerton", desc: "You are the Diamond of the Season! Romantic, graceful, and determined, you believe in true love and will stop at nothing to find it. Your charm lights up every room, and your heart is as golden as your reputation." },
+            benedict: { emoji: "🎨", name: "Benedict Bridgerton", desc: "You are the artistic soul of the family! Free-spirited and unconventional, you see the world through a lens of beauty and creativity. You march to the beat of your own drum and wouldn't have it any other way." },
+            eloise: { emoji: "📚", name: "Eloise Bridgerton", desc: "You are the fierce intellectual! Independent, curious, and unapologetically yourself, you question everything and everyone. Society's rules? Merely suggestions. Your pen is mightier than any sword." },
+            penelope: { emoji: "✒️", name: "Penelope Featherington", desc: "You are the secret genius! Quietly observant and wickedly clever, you know everyone's secrets before they do. Underestimated by many, you prove that the quietest voice in the room often has the most to say." },
+            anthony: { emoji: "🎩", name: "Anthony Bridgerton", desc: "You are the dutiful viscount! Responsible, passionate, and fiercely protective of those you love. You carry the weight of the world on your shoulders — but you do it with impeccable style." },
+            kate: { emoji: "🏇", name: "Kate Sharma", desc: "You are the unstoppable force! Sharp-witted, independent, and unapologetically bold, you challenge everyone around you to be better. You don't need saving — you're too busy saving everyone else." },
+            colin: { emoji: "🌍", name: "Colin Bridgerton", desc: "You are the charming adventurer! Warm, curious, and endlessly likeable, you collect experiences like others collect jewels. The world is your playground, and every conversation is an opportunity for discovery." },
+        };
+
+        let currentQ = 0;
+        let scores = {};
+
+        function startQuiz() {
+            currentQ = 0;
+            scores = {};
+            document.getElementById('quiz-content').style.display = 'block';
+            document.getElementById('result-card').classList.remove('visible');
+            showQuestion();
+        }
+
+        function showQuestion() {
+            const q = questions[currentQ];
+            document.getElementById('progress-fill').style.width = ((currentQ + 1) / questions.length * 100) + '%';
+            document.getElementById('question-num').textContent = `Question ${currentQ + 1} of ${questions.length}`;
+            document.getElementById('question-text').textContent = q.q;
+            document.getElementById('answers').innerHTML = q.a.map((a, i) =>
+                `<button class="answer-option" onclick="answer('${a.type}')">${a.text}</button>`
+            ).join('');
+        }
+
+        function answer(type) {
+            scores[type] = (scores[type] || 0) + 1;
+            currentQ++;
+            if (currentQ < questions.length) {
+                showQuestion();
+            } else {
+                showResult();
+            }
+        }
+
+        function showResult() {
+            const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+            const char = characters[winner];
+            document.getElementById('quiz-content').style.display = 'none';
+            document.getElementById('result-emoji').textContent = char.emoji;
+            document.getElementById('result-name').textContent = char.name;
+            document.getElementById('result-desc').textContent = char.desc;
+            document.getElementById('result-card').classList.add('visible');
+        }
+
+        startQuiz();
+    </script>
+</body>
+
+</html>
