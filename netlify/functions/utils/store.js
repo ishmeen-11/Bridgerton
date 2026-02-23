@@ -8,16 +8,29 @@ const { getStore } = require('@netlify/blobs');
 const INVITATIONS_KEY = 'invitations';
 const MESSAGES_KEY = 'messages';
 
+// Get a configured blob store — uses manual config if auto-detect fails
+function getBlobStore() {
+    const config = { name: 'bridgerton-data' };
+
+    // Manual config when auto-detection doesn't work
+    if (process.env.NETLIFY_SITE_ID && process.env.NETLIFY_TOKEN) {
+        config.siteID = process.env.NETLIFY_SITE_ID;
+        config.token = process.env.NETLIFY_TOKEN;
+    }
+
+    return getStore(config);
+}
+
 // ─── Invitation helpers ──────────────────────────────────
 
 async function getAllInvitations() {
-    const store = getStore('bridgerton-data');
+    const store = getBlobStore();
     const data = await store.get(INVITATIONS_KEY);
     return data ? JSON.parse(data) : [];
 }
 
 async function saveAllInvitations(invitations) {
-    const store = getStore('bridgerton-data');
+    const store = getBlobStore();
     await store.set(INVITATIONS_KEY, JSON.stringify(invitations));
 }
 
@@ -50,14 +63,14 @@ async function markInvitationUsed(code) {
 // ─── Message helpers ─────────────────────────────────────
 
 async function getRecentMessages(limit = 100) {
-    const store = getStore('bridgerton-data');
+    const store = getBlobStore();
     const data = await store.get(MESSAGES_KEY);
     const messages = data ? JSON.parse(data) : [];
     return messages.slice(-limit);
 }
 
 async function saveMessage(senderName, inviteCode, content) {
-    const store = getStore('bridgerton-data');
+    const store = getBlobStore();
     const data = await store.get(MESSAGES_KEY);
     const messages = data ? JSON.parse(data) : [];
     messages.push({
