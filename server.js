@@ -27,9 +27,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 // ─── Email transporter ──────────────────────────────────
 let transporter;
 try {
-    const smtpPort = parseInt(process.env.SMTP_PORT || '465');
+    const smtpPort = parseInt(process.env.SMTP_PORT || '587');
     transporter = nodemailer.createTransport({
-        host: process.env.SMTP_HOST || 'smtp.gmail.com',
+        host: process.env.SMTP_HOST || 'smtp.sendgrid.net',
         port: smtpPort,
         secure: smtpPort === 465, // true for 465 (SSL), false for 587 (STARTTLS)
         auth: {
