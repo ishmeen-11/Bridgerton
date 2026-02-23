@@ -7,7 +7,7 @@ exports.handler = async (event) => {
     }
 
     const { adminKey } = JSON.parse(event.body || '{}');
-    const ADMIN_KEY = process.env.ADMIN_KEY || 'bridgerton-admin-2026';
+    const ADMIN_KEY = process.env.ADMIN_KEY || 'bridgerton2026';
 
     if (adminKey !== ADMIN_KEY) {
         return { statusCode: 403, body: JSON.stringify({ error: 'Unauthorized.' }) };

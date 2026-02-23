@@ -9,7 +9,7 @@ exports.handler = async (event) => {
     }
 
     const { adminKey, email, guestName } = JSON.parse(event.body || '{}');
-    const ADMIN_KEY = process.env.ADMIN_KEY || 'bridgerton-admin-2026';
+    const ADMIN_KEY = process.env.ADMIN_KEY || 'bridgerton2026';
 
     if (adminKey !== ADMIN_KEY) {
         return { statusCode: 403, body: JSON.stringify({ error: 'Incorrect admin key, darling. The Queen does not approve.' }) };
